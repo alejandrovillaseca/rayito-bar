@@ -1,0 +1,141 @@
+/*
+ * ============================================================
+ *  RAYITO DJ — DESIGN TOKENS
+ *  Copia este archivo a cualquier proyecto para usar el mismo
+ *  sistema de colores, tipografía y espaciado.
+ *
+ *  USO:
+ *    <link rel="stylesheet" href="tokens.css">
+ *    <link rel="stylesheet" href="design-system.css">
+ *    <script src="design-system.js"></script>
+ *
+ *  Para cambiar de tema: añade la clase "theme-light" al <html>.
+ *  Por defecto aplica el Dark Theme.
+ * ============================================================
+ */
+
+/* ── DARK THEME (default) ─────────────────────────────────── */
+:root {
+    /* Fondos */
+    --bg-main:     #181A20;   /* fondo base de la app */
+    --bg-panel:    #22252A;   /* paneles, sidebars */
+    --bg-elevated: #2A2D35;   /* cards, inputs, dropdowns */
+    --bg-input:    #22252A;   /* inputs específicamente */
+
+    /* Acento principal — naranja Rayito */
+    --accent-orange:      #C86400;
+    --accent-orange-dim:  rgba(200, 100, 0, 0.15);  /* hover bg sutil */
+    --accent-orange-hover: #E07500;                 /* hover del botón */
+
+    /* Texto */
+    --text-primary:   #FFFFFF;
+    --text-secondary: #8A8A93;
+    --text-muted:     #666666;
+
+    /* Bordes */
+    --border-color: #33363D;  /* borde general */
+    --border-light: #444444;  /* borde más visible (inputs activos) */
+
+    /* Sombras */
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --shadow-sm:  0 2px 8px  rgba(0, 0, 0, 0.4);
+    --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.5);
+    --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.7);
+
+    /* Scrollbar */
+    --scrollbar-track: #1a1c20;
+    --scrollbar-thumb: #444444;
+
+    /* Tabla */
+    --table-row-hover:    rgba(200, 100, 0, 0.08);
+    --table-row-selected: rgba(200, 100, 0, 0.20);
+
+    /* Modal backdrop */
+    --modal-backdrop: rgba(0, 0, 0, 0.85);
+
+    /* Tipografía */
+    --font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-size-xs:  0.7rem;
+    --font-size-sm:  0.8rem;
+    --font-size-md:  0.875rem;
+    --font-size-base: 1rem;
+
+    /* Radios */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-pill: 999px;
+
+    /* Espaciado base (múltiplos de 4px) */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+}
+
+/* ── DARK THEME (clase explícita) ─────────────────────────── */
+:root.theme-dark, html.theme-dark {
+    --bg-main:     #181A20;
+    --bg-panel:    #22252A;
+    --bg-elevated: #2A2D35;
+    --bg-input:    #22252A;
+    --accent-orange:       #C86400;
+    --accent-orange-dim:   rgba(200, 100, 0, 0.15);
+    --accent-orange-hover: #E07500;
+    --text-primary:   #FFFFFF;
+    --text-secondary: #8A8A93;
+    --text-muted:     #666666;
+    --border-color:   #33363D;
+    --border-light:   #444444;
+    --shadow-color:   rgba(0, 0, 0, 0.5);
+    --scrollbar-track: #1a1c20;
+    --scrollbar-thumb: #444444;
+    --table-row-hover:    rgba(200, 100, 0, 0.08);
+    --table-row-selected: rgba(200, 100, 0, 0.20);
+    --modal-backdrop: rgba(0, 0, 0, 0.85);
+}
+
+/* ── LIGHT THEME ──────────────────────────────────────────── */
+:root.theme-light, html.theme-light {
+    --bg-main:     #F5F5F7;
+    --bg-panel:    #FFFFFF;
+    --bg-elevated: #FAFAFA;
+    --bg-input:    #FFFFFF;
+    --accent-orange:       #D97000;
+    --accent-orange-dim:   rgba(217, 112, 0, 0.12);
+    --accent-orange-hover: #FF8C00;
+    --text-primary:   #1D1D1F;
+    --text-secondary: #6E6E73;
+    --text-muted:     #999999;
+    --border-color:   #E0E0E0;
+    --border-light:   #D0D0D0;
+    --shadow-color:   rgba(0, 0, 0, 0.1);
+    --shadow-sm:  0 2px 8px  rgba(0, 0, 0, 0.10);
+    --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.12);
+    --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.15);
+    --scrollbar-track: #F0F0F0;
+    --scrollbar-thumb: #C0C0C0;
+    --table-row-hover:    rgba(217, 112, 0, 0.06);
+    --table-row-selected: rgba(217, 112, 0, 0.15);
+    --modal-backdrop: rgba(0, 0, 0, 0.50);
+}
+
+/* ── BASE RESET mínimo ────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar global */
+::-webkit-scrollbar       { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-orange); }

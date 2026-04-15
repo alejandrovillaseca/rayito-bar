@@ -1,0 +1,486 @@
+/*
+ * ============================================================
+ *  RAYITO DJ — DESIGN SYSTEM
+ *  Componentes reutilizables. Úsalos en cualquier vista nueva.
+ *  NO duplicar estos estilos en archivos de componente.
+ * ============================================================
+ *
+ *  ÍNDICE
+ *  1.  Form Row
+ *  2.  Labels
+ *  3.  Combobox / Custom Select   →  .rds-select
+ *  4.  Text Input                 →  .rds-input
+ *  5.  Checkboxes / Toggle        →  .rds-checkbox
+ *  6.  Buttons                    →  .rds-btn + variants
+ *  7.  Section heading            →  .rds-section-title / .rds-desc
+ *  8.  Card / Panel               →  .rds-card
+ *  9.  Table                      →  .rds-table
+ *  10. Badge                      →  .rds-badge
+ *  11. Banner                     →  .rds-banner
+ *  12. Toast                      →  .rds-toast
+ *  13. Divider
+ * ============================================================
+ */
+
+/* ══════════════════════════════════════════════════════════
+   1. FORM ROW  — fila de label + control alineados
+   ══════════════════════════════════════════════════════════ */
+.rds-form-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.rds-form-row:last-child { border-bottom: none; }
+
+/* ══════════════════════════════════════════════════════════
+   2. LABELS
+   ══════════════════════════════════════════════════════════ */
+.rds-label {
+    width: 140px;
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* ══════════════════════════════════════════════════════════
+   3. CUSTOM SELECT / COMBOBOX  (.rds-select)
+   Estilo idéntico al .custom-select de styles.css.
+   Requiere el JS helper initRdsSelects() de design-system.js
+   ══════════════════════════════════════════════════════════
+
+   HTML:
+   <div class="rds-select" data-value="title">
+     <div class="rds-select__trigger">Title</div>
+     <div class="rds-select__options">
+       <div class="rds-select__option" data-value="title">Title</div>
+       <div class="rds-select__option" data-value="artist">Artist</div>
+     </div>
+   </div>
+*/
+.rds-select {
+    position: relative;
+    min-width: 180px;
+    font-size: 0.875rem;
+    user-select: none;
+}
+
+.rds-select__trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-light);
+    color: var(--text-primary);
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.rds-select__trigger::after {
+    content: '▼';
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+.rds-select.open .rds-select__trigger {
+    border-color: var(--accent-orange);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.rds-select__options {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: var(--bg-elevated);
+    border: 1px solid var(--accent-orange);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    z-index: 9999;
+    max-height: 220px;
+    overflow-y: auto;
+}
+.rds-select.open .rds-select__options { display: block; }
+
+.rds-select__option {
+    padding: 9px 14px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 0.875rem;
+}
+.rds-select__option:hover { background: var(--accent-orange-dim); color: var(--text-primary); }
+.rds-select__option.selected { background: var(--accent-orange); color: #fff; }
+
+/* Scrollbar del dropdown */
+.rds-select__options::-webkit-scrollbar { width: 4px; }
+.rds-select__options::-webkit-scrollbar-track { background: transparent; }
+.rds-select__options::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
+
+/* ══════════════════════════════════════════════════════════
+   4. TEXT INPUT  (.rds-input)
+   ══════════════════════════════════════════════════════════ */
+.rds-input {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    color: var(--text-primary);
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+    box-sizing: border-box;
+}
+.rds-input:focus { border-color: var(--accent-orange); }
+.rds-input::placeholder { color: var(--text-muted); }
+
+/* ══════════════════════════════════════════════════════════
+   5. CHECKBOX  (.rds-checkbox)
+   ══════════════════════════════════════════════════════════
+
+   HTML:
+   <label class="rds-checkbox">
+     <input type="checkbox" class="rds-checkbox__input">
+     <span class="rds-checkbox__box"></span>
+     <span class="rds-checkbox__label">Opción</span>
+   </label>
+*/
+.rds-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.rds-checkbox__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.rds-checkbox__box {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    background: var(--bg-elevated);
+    border: 2px solid var(--border-light);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+}
+.rds-checkbox__box::after {
+    content: '';
+    width: 10px;
+    height: 7px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) scale(0);
+    transition: transform 0.12s;
+    margin-bottom: 2px;
+}
+
+.rds-checkbox__input:checked ~ .rds-checkbox__box {
+    background: var(--accent-orange);
+    border-color: var(--accent-orange);
+}
+.rds-checkbox__input:checked ~ .rds-checkbox__box::after {
+    transform: rotate(-45deg) scale(1);
+}
+
+.rds-checkbox__label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Variant: solo el box sin label (para tablas) */
+.rds-checkbox--bare .rds-checkbox__label { display: none; }
+
+/* ══════════════════════════════════════════════════════════
+   6. BUTTONS
+   ══════════════════════════════════════════════════════════
+
+   .rds-btn                  → base (requiere variante)
+   .rds-btn--primary         → naranja (acción principal)
+   .rds-btn--secondary       → gris (acción secundaria)
+   .rds-btn--ghost           → borde sutil (Back, Cancel)
+   .rds-btn--danger          → rojo (eliminar, ignorar)
+   .rds-btn--confirm         → verde (confirmar cambios)
+   .rds-btn--sm              → tamaño pequeño
+   .rds-btn--icon            → solo icono, sin texto
+*/
+.rds-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+    white-space: nowrap;
+    line-height: 1;
+}
+.rds-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+.rds-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* Primary */
+.rds-btn--primary {
+    background: var(--accent-orange);
+    color: #fff;
+}
+.rds-btn--primary:not(:disabled):hover {
+    background: var(--accent-orange-hover);
+    box-shadow: 0 3px 14px rgba(200, 100, 0, 0.35);
+}
+.rds-btn--primary:not(:disabled):active { transform: translateY(1px); }
+
+/* Secondary */
+.rds-btn--secondary {
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+.rds-btn--secondary:not(:disabled):hover {
+    background: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Ghost */
+.rds-btn--ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+.rds-btn--ghost:not(:disabled):hover {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+/* Danger */
+.rds-btn--danger {
+    background: rgba(180, 40, 40, 0.15);
+    color: #e06060;
+    border: 1px solid rgba(180, 40, 40, 0.3);
+}
+.rds-btn--danger:not(:disabled):hover {
+    background: rgba(180, 40, 40, 0.3);
+    color: #ff8080;
+}
+
+/* Confirm / Success */
+.rds-btn--confirm {
+    background: #2e7d32;
+    color: #fff;
+}
+.rds-btn--confirm:not(:disabled):hover { background: #388e3c; }
+
+/* Small */
+.rds-btn--sm {
+    padding: 6px 13px;
+    font-size: 0.8rem;
+    border-radius: 5px;
+}
+.rds-btn--sm svg { width: 13px; height: 13px; }
+
+/* Icon-only */
+.rds-btn--icon {
+    padding: 7px;
+    border-radius: 5px;
+}
+.rds-btn--icon svg { width: 16px; height: 16px; }
+
+/* ══════════════════════════════════════════════════════════
+   7. SECTION HEADING  (.rds-section-title / .rds-desc)
+   ══════════════════════════════════════════════════════════ */
+.rds-section-title {
+    margin: 0 0 4px 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+.rds-desc {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+
+/* eyebrow — texto de categoría sobre el title */
+.rds-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 6px 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   8. CARD / PANEL  (.rds-card)
+   ══════════════════════════════════════════════════════════ */
+.rds-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px 20px;
+}
+.rds-card__title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin: 0 0 12px 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   9. TABLE  (.rds-table)
+   ══════════════════════════════════════════════════════════ */
+.rds-table-wrap {
+    flex: 1;
+    overflow-y: auto;
+}
+.rds-table-wrap::-webkit-scrollbar { width: 6px; }
+.rds-table-wrap::-webkit-scrollbar-track { background: var(--bg-main); }
+.rds-table-wrap::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+
+.rds-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+.rds-table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--bg-elevated);
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    z-index: 2;
+    white-space: nowrap;
+}
+.rds-table thead th.rds-col-check { width: 40px; text-align: center; }
+
+.rds-table tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.1s;
+}
+.rds-table tbody tr:hover { background: var(--table-row-hover); }
+.rds-table tbody tr.rds-row--selected { background: var(--table-row-selected); }
+.rds-table tbody tr.rds-row--muted { opacity: 0.35; }
+
+.rds-table td {
+    padding: 9px 14px;
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+.rds-table td.rds-col-check { text-align: center; padding: 0 8px; }
+.rds-table td.rds-cell--highlight { color: var(--accent-orange); font-weight: 500; }
+
+/* ══════════════════════════════════════════════════════════
+   10. BADGE  (.rds-badge)
+   ══════════════════════════════════════════════════════════ */
+.rds-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+.rds-badge--new     { background: rgba(200,100,0,0.2);  color: var(--accent-orange); }
+.rds-badge--fix     { background: rgba(80,180,80,0.15); color: #6fcf6f; }
+.rds-badge--improve { background: rgba(80,130,230,0.15); color: #7eaaee; }
+.rds-badge--count   { background: var(--bg-elevated); color: var(--text-secondary); border: 1px solid var(--border-color); }
+
+/* ══════════════════════════════════════════════════════════
+   11. BANNER  (.rds-banner)
+   ══════════════════════════════════════════════════════════ */
+.rds-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    font-size: 0.84rem;
+    gap: 12px;
+}
+.rds-banner--info    { background: #0d3a4d; border-bottom: 1px solid #1a6080; color: #9dd4ee; }
+.rds-banner--success { background: #0d3d1a; border-bottom: 1px solid #1a6030; color: #8ddba8; }
+.rds-banner--warning { background: #3d2a00; border-bottom: 1px solid #6a4700; color: #e8b96e; }
+.rds-banner--danger  { background: #3d0d0d; border-bottom: 1px solid #6a1a1a; color: #ee9d9d; }
+
+.rds-banner__dismiss {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 0.78rem;
+    opacity: 0.7;
+    text-decoration: underline;
+    flex-shrink: 0;
+    padding: 0;
+}
+.rds-banner__dismiss:hover { opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════
+   12. TOAST  (.rds-toast)
+   ══════════════════════════════════════════════════════════ */
+.rds-toast {
+    position: fixed;
+    bottom: 72px;
+    left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 0.84rem;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s, transform 0.22s;
+    z-index: 9999;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    white-space: nowrap;
+}
+.rds-toast.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: all;
+}
+
+/* ══════════════════════════════════════════════════════════
+   13. DIVIDER
+   ══════════════════════════════════════════════════════════ */
+.rds-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 8px 0;
+}
