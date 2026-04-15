@@ -25,32 +25,46 @@
             z-index: 100;
             background: var(--bg-panel);
             border-bottom: 1px solid var(--border-color);
-            padding: var(--space-4) var(--space-4) var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
         }
         .app-header__top {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--space-3);
+            gap: var(--space-3);
         }
         .app-logo {
             display: flex;
             align-items: center;
             gap: var(--space-2);
+            flex-shrink: 0;
         }
-        .app-logo__icon { font-size: 1.4rem; line-height: 1; }
+        .app-logo__icon { font-size: 1.3rem; line-height: 1; }
         .app-logo__name {
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--text-primary);
             letter-spacing: 0.04em;
+            white-space: nowrap;
         }
         .app-logo__name span { color: var(--accent-orange); }
         /* ── Search ── */
         .search-box {
             flex: 1;
-            max-width: 300px;
+            min-width: 0;
         }
+        /* ── Filter pills ── */
+        .filter-bar {
+            display: flex;
+            gap: var(--space-2);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            align-items: center;
+        }
+        .filter-bar::-webkit-scrollbar { display: none; }
         .search-input {
             width: 100%;
             box-sizing: border-box;
@@ -70,16 +84,37 @@
         .search-input:focus { border-color: var(--accent-orange); }
         .search-input::placeholder { color: var(--text-muted); }
 
-        /* ── Filter pills ── */
-        .filter-bar {
-            display: flex;
-            gap: var(--space-2);
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            align-items: center;
+        /* (filter-bar defined above in header) */
+        .filter-pill {
+            flex-shrink: 0;
+            padding: 5px 14px;
+            border-radius: var(--radius-pill);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            transition: all 0.15s;
+            white-space: nowrap;
         }
-        .filter-bar::-webkit-scrollbar { display: none; }
+        .filter-pill:hover,
+        .filter-pill.active { border-color: var(--accent-orange); }
+        .filter-pill.active  { background: var(--accent-orange); color: #fff; }
+        .filter-pill[data-dif="Básico"].active  { background: #16a34a; border-color: #16a34a; }
+        .filter-pill[data-dif="Medio"].active   { background: var(--accent-orange); border-color: var(--accent-orange); }
+        .filter-pill[data-dif="Difícil"].active { background: #dc2626; border-color: #dc2626; }
+        .count-chip {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+            margin-left: auto;
+            padding: 2px 10px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-pill);
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
         .filter-pill {
             flex-shrink: 0;
             padding: 5px 14px;
@@ -130,8 +165,8 @@
         /* ── Cocktail table ── */
         .cocktail-table {
             width: 100%;
+            min-width: 820px;
             border-collapse: collapse;
-            table-layout: fixed;
             font-family: var(--font-family);
         }
 
@@ -149,13 +184,6 @@
             color: var(--text-muted);
             border-bottom: 2px solid var(--border-color);
             white-space: nowrap;
-        }
-        /* Sticky thead — works because overflow-y is visible on wrapper */
-        .cocktail-table thead th {
-            position: sticky;
-            top: var(--header-h, 0px);
-            z-index: 10;
-            background: var(--bg-panel);
         }
         .th-sub {
             display: block;
@@ -191,18 +219,10 @@
         }
 
         /* Column widths */
-        .col-coctel     { width: 14%; }
-        .col-dif        { width: 4%; text-align: center; }
-        .col-inventario { width: 24%; }
-        .col-prebatch   { width: 30%; }
-        .col-servicio   { width: 28%; }
-
-        /* Dot column: center + middle */
-        .cocktail-table th.col-dif,
-        .cocktail-table td:nth-child(2) { text-align: center; vertical-align: middle; padding: var(--space-3) var(--space-2); }
-
-        /* Wrap text */
-        .cocktail-table tbody td { word-break: break-word; overflow-wrap: break-word; }
+        .col-coctel     { width: 190px; }
+        .col-inventario { width: 210px; }
+        .col-prebatch   { width: 240px; }
+        .col-servicio   { min-width: 190px; }
 
         /* Cocktail name cell */
         .coctel-cell {
@@ -216,11 +236,24 @@
             flex-shrink: 0;
             margin-top: 1px;
         }
+        .coctel-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
         .coctel-name {
             font-weight: 700;
             color: var(--text-primary);
             font-size: var(--font-size-md);
             line-height: 1.3;
+        }
+        .coctel-dif {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.67rem;
+            font-weight: 600;
+            color: var(--text-muted);
         }
 
         /* Difficulty dot */
@@ -237,21 +270,30 @@
 
         /* Ingredient list */
         .ingredient-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
-        .ingredient-item {
+        .ingredient-list li {
             display: flex;
             align-items: baseline;
             gap: 6px;
             font-size: var(--font-size-sm);
             color: var(--text-secondary);
+            line-height: 1.4;
         }
-        .ingredient-check {
-            color: var(--text-muted);
+        .ingredient-list li::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent-orange);
             flex-shrink: 0;
-            font-size: 0.8rem;
+            margin-top: 5px;
         }
 
         /* ── Empty / skeleton states ── */
@@ -284,7 +326,7 @@
 </head>
 <body>
 
-    <!-- Sticky header -->
+    <!-- Sticky header: 2 filas -->
     <header class="app-header" id="appHeader">
         <div class="app-header__top">
             <div class="app-logo">
@@ -292,7 +334,7 @@
                 <span class="app-logo__name">RAYITO'S <span>BAR</span></span>
             </div>
             <div class="search-box">
-                <input type="search" id="searchInput" class="search-input" placeholder="Buscar cóctel o ingrediente…" autocomplete="off">
+                <input type="search" id="searchInput" class="search-input" placeholder="Buscar…" autocomplete="off">
             </div>
         </div>
         <div class="filter-bar" id="filterBar">
@@ -311,7 +353,6 @@
                 <thead>
                     <tr>
                         <th class="col-coctel">Cóctel</th>
-                        <th class="col-dif" title="Dificultad">●</th>
                         <th class="col-inventario">🛒 Check de Inventario <span class="th-sub">por persona</span></th>
                         <th class="col-prebatch">⏱️ Pre-Batch <span class="th-sub">horas antes del evento</span></th>
                         <th class="col-servicio">🧊 En el Momento <span class="th-sub">servicio</span></th>
@@ -402,14 +443,17 @@
          */
         function renderIngredients(text) {
             if (!text || !text.trim()) return '<span style="opacity:.4">—</span>';
-            // Split por el carácter ◻ (con o sin variante emoji \uFE0F)
-            const parts = text.split(/◻\uFE0F?/u).map(s => s.trim()).filter(Boolean);
-            if (parts.length === 0) return escapeHTML(text);
-            return '<div class="ingredient-list">' +
-                parts.map(item =>
-                    `<div class="ingredient-item"><span class="ingredient-check">◻</span><span>${escapeHTML(item)}</span></div>`
-                ).join('') +
-                '</div>';
+            // 1º intenta split por ◻️ (separador del Excel)
+            let parts = text.split(/◻\uFE0F?/u).map(s => s.trim()).filter(Boolean);
+            // 2º si quedó solo un item, intenta separar por salto de línea o coma
+            if (parts.length <= 1) {
+                const raw = parts[0] || text.trim();
+                parts = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+            }
+            if (parts.length <= 1) return `<span>${escapeHTML(parts[0] || text.trim())}</span>`;
+            return '<ul class="ingredient-list">' +
+                parts.map(item => `<li>${escapeHTML(item)}</li>`).join('') +
+                '</ul>';
         }
 
         /* ── Build a table row ── */
@@ -435,11 +479,14 @@
                 <td>
                     <div class="coctel-cell">
                         <span class="coctel-icon" aria-hidden="true">${icon}</span>
-                        <span class="coctel-name">${escapeHTML(coctel)}</span>
+                        <div class="coctel-info">
+                            <span class="coctel-name">${escapeHTML(coctel)}</span>
+                            <span class="coctel-dif">
+                                <span class="dif-dot dif-dot--${DIF_CLASS[dif]}"></span>
+                                ${escapeHTML(dif)}
+                            </span>
+                        </div>
                     </div>
-                </td>
-                <td>
-                    <span class="dif-dot dif-dot--${DIF_CLASS[dif]}" title="${escapeHTML(dif)}"></span>
                 </td>
                 <td>${renderIngredients(inventario)}</td>
                 <td>${escapeHTML(prebatch) || '<span style="opacity:.4">—</span>'}</td>
@@ -472,7 +519,7 @@
                 const msg = q
                     ? `Sin resultados para "${escapeHTML(searchQuery)}"`
                     : `Sin resultados para "${escapeHTML(activeFilter)}"`;
-                tbody.innerHTML = `<tr class="state-row"><td colspan="5">
+                tbody.innerHTML = `<tr class="state-row"><td colspan="4">
                     <span class="state-msg__icon">🍸</span>
                     ${msg}
                 </td></tr>`;
@@ -488,8 +535,7 @@
         function showSkeletons() {
             document.getElementById('dashboard').innerHTML = [1,2,3,4].map(() => `
                 <tr>
-                    <td><div class="skeleton skeleton--title"></div><div class="skeleton skeleton--sub"></div></td>
-                    <td><div class="skeleton" style="width:11px;height:11px;border-radius:50%;margin:auto"></div></td>
+                    <td><div class="skeleton skeleton--title" style="margin-bottom:6px"></div><div class="skeleton skeleton--sub"></div></td>
                     <td>
                         <div class="skeleton skeleton--line"></div>
                         <div class="skeleton skeleton--line2"></div>
@@ -521,7 +567,7 @@
                 },
                 error: function() {
                     document.getElementById('dashboard').innerHTML =
-                        `<tr class="state-row"><td colspan="5">
+                        `<tr class="state-row"><td colspan="4">
                             <span class="state-msg__icon">⚠️</span>
                             No se pudo cargar la data.<br>Verifica tu conexión.
                         </td></tr>`;
@@ -529,13 +575,7 @@
             });
         }
 
-        /* ── Sticky header offset for thead ── */
-        function syncStickyOffset() {
-            const h = document.getElementById('appHeader').offsetHeight;
-            document.documentElement.style.setProperty('--header-h', h + 'px');
-        }
-        window.addEventListener('resize', syncStickyOffset);
-        syncStickyOffset();
+        /* ── Sticky header offset removed (thead sticky doesn't work inside overflow-x:auto) ── */
 
         /* ── Search ── */
         document.getElementById('searchInput').addEventListener('input', function() {
