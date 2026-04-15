@@ -38,33 +38,37 @@
             align-items: center;
             gap: var(--space-2);
         }
-        .app-logo__icon {
-            font-size: 1.4rem;
-            line-height: 1;
-        }
+        .app-logo__icon { font-size: 1.4rem; line-height: 1; }
         .app-logo__name {
             font-size: 1.05rem;
             font-weight: 700;
             color: var(--text-primary);
             letter-spacing: 0.04em;
         }
-        .app-logo__name span {
-            color: var(--accent-orange);
+        .app-logo__name span { color: var(--accent-orange); }
+        /* ── Search ── */
+        .search-box {
+            flex: 1;
+            max-width: 300px;
         }
-        .app-refresh {
-            font-size: var(--font-size-xs);
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            border-radius: var(--radius-sm);
-            transition: background 0.15s;
+        .search-input {
+            width: 100%;
+            box-sizing: border-box;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-pill);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            font-size: var(--font-size-sm);
+            padding: 6px 14px 6px 32px;
+            outline: none;
+            transition: border-color 0.15s;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 10px center;
         }
-        .app-refresh:hover { background: var(--bg-elevated); }
-        .app-refresh.spinning .refresh-icon { animation: spin 0.7s linear; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .search-input:focus { border-color: var(--accent-orange); }
+        .search-input::placeholder { color: var(--text-muted); }
 
         /* ── Filter pills ── */
         .filter-bar {
@@ -73,6 +77,7 @@
             overflow-x: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            align-items: center;
         }
         .filter-bar::-webkit-scrollbar { display: none; }
         .filter-pill {
@@ -88,118 +93,171 @@
             transition: all 0.15s;
             white-space: nowrap;
         }
-        .filter-pill.active,
-        .filter-pill:hover { border-color: var(--accent-orange); }
-        .filter-pill.active { background: var(--accent-orange); color: #fff; }
+        .filter-pill:hover,
+        .filter-pill.active { border-color: var(--accent-orange); }
+        .filter-pill.active  { background: var(--accent-orange); color: #fff; }
         .filter-pill[data-dif="Básico"].active  { background: #16a34a; border-color: #16a34a; }
         .filter-pill[data-dif="Medio"].active   { background: var(--accent-orange); border-color: var(--accent-orange); }
         .filter-pill[data-dif="Difícil"].active { background: #dc2626; border-color: #dc2626; }
+        .count-chip {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+            margin-left: auto;
+            padding: 2px 10px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-pill);
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
 
         /* ── Main content ── */
         .app-content {
             padding: var(--space-4);
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-3);
-            max-width: 540px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* ── Cocktail card ── */
-        .cocktail-card {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border-color);
+        /* ── Table wrapper (horizontal scroll on mobile) ── */
+        .table-wrapper {
             border-radius: var(--radius-lg);
-            overflow: hidden;
-            transition: transform 0.15s, box-shadow 0.15s;
-        }
-        .cocktail-card:active { transform: scale(0.99); }
-
-        .cocktail-card__header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--space-4);
-            border-bottom: 1px solid var(--border-color);
-            gap: var(--space-3);
-        }
-        .cocktail-card__left {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-            min-width: 0;
-        }
-        .cocktail-card__name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .cocktail-card__base {
-            font-size: var(--font-size-xs);
-            color: var(--text-muted);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-        }
-        .cocktail-card__badges {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: var(--space-1);
-            flex-shrink: 0;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            box-shadow: var(--shadow-sm);
         }
 
-        /* Dificultad badge colors */
-        .badge--basico  { background: rgba(22,163,74,0.15); color: #4ade80; border-radius: var(--radius-pill); padding: 2px 10px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
-        .badge--medio   { background: var(--accent-orange-dim); color: var(--accent-orange); border-radius: var(--radius-pill); padding: 2px 10px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
-        .badge--dificil { background: rgba(220,38,38,0.15); color: #f87171; border-radius: var(--radius-pill); padding: 2px 10px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
-
-        .costo-badge {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            white-space: nowrap;
+        /* ── Cocktail table ── */
+        .cocktail-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-family: var(--font-family);
         }
 
-        /* Difficulty left border */
-        .cocktail-card[data-dif="Básico"]  { border-left: 3px solid #16a34a; }
-        .cocktail-card[data-dif="Medio"]   { border-left: 3px solid var(--accent-orange); }
-        .cocktail-card[data-dif="Difícil"] { border-left: 3px solid #dc2626; }
-
-        /* ── Card sections ── */
-        .cocktail-section {
+        /* Header row */
+        .cocktail-table thead tr {
+            background: var(--bg-panel);
+        }
+        .cocktail-table thead th {
             padding: var(--space-3) var(--space-4);
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-        }
-        .cocktail-section:last-child { border-bottom: none; }
-        .cocktail-section__label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            text-align: left;
             font-size: var(--font-size-xs);
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: var(--text-muted);
-            margin-bottom: 6px;
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
         }
-        .cocktail-section__label .emoji {
-            font-size: 0.85rem;
+        /* Sticky thead — works because overflow-y is visible on wrapper */
+        .cocktail-table thead th {
+            position: sticky;
+            top: var(--header-h, 0px);
+            z-index: 10;
+            background: var(--bg-panel);
         }
-        .cocktail-section__body {
-            font-size: var(--font-size-md);
+        .th-sub {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: 0;
+            color: var(--text-muted);
+            margin-top: 2px;
+            opacity: 0.75;
+        }
+
+        /* Body rows */
+        .cocktail-table tbody tr {
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            transition: background 0.1s;
+        }
+        .cocktail-table tbody tr:last-child { border-bottom: none; }
+        .cocktail-table tbody tr:hover      { background: var(--table-row-hover); }
+
+        /* Difficulty left border on first cell */
+        .cocktail-table tbody tr[data-dif="Básico"]  td:first-child { border-left: 3px solid #16a34a; }
+        .cocktail-table tbody tr[data-dif="Medio"]   td:first-child { border-left: 3px solid var(--accent-orange); }
+        .cocktail-table tbody tr[data-dif="Difícil"] td:first-child { border-left: 3px solid #dc2626; }
+
+        /* Body cells */
+        .cocktail-table tbody td {
+            padding: var(--space-3) var(--space-4);
+            vertical-align: top;
             color: var(--text-secondary);
+            font-size: var(--font-size-sm);
             line-height: 1.55;
         }
 
-        /* ── Empty / loading states ── */
-        .state-msg {
+        /* Column widths */
+        .col-coctel     { width: 14%; }
+        .col-dif        { width: 4%; text-align: center; }
+        .col-inventario { width: 24%; }
+        .col-prebatch   { width: 30%; }
+        .col-servicio   { width: 28%; }
+
+        /* Dot column: center + middle */
+        .cocktail-table th.col-dif,
+        .cocktail-table td:nth-child(2) { text-align: center; vertical-align: middle; padding: var(--space-3) var(--space-2); }
+
+        /* Wrap text */
+        .cocktail-table tbody td { word-break: break-word; overflow-wrap: break-word; }
+
+        /* Cocktail name cell */
+        .coctel-cell {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-2);
+        }
+        .coctel-icon {
+            font-size: 1.45rem;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .coctel-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: var(--font-size-md);
+            line-height: 1.3;
+        }
+
+        /* Difficulty dot */
+        .dif-dot {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .dif-dot--basico  { background: #16a34a; box-shadow: 0 0 6px rgba(22,163,74,0.55); }
+        .dif-dot--medio   { background: #C86400; box-shadow: 0 0 6px rgba(200,100,0,0.55); }
+        .dif-dot--dificil { background: #dc2626; box-shadow: 0 0 6px rgba(220,38,38,0.55); }
+
+        /* Ingredient list */
+        .ingredient-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .ingredient-item {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+        .ingredient-check {
+            color: var(--text-muted);
+            flex-shrink: 0;
+            font-size: 0.8rem;
+        }
+
+        /* ── Empty / skeleton states ── */
+        .state-row td {
             text-align: center;
-            padding: var(--space-6) var(--space-4);
+            padding: 48px var(--space-4);
             color: var(--text-muted);
             font-size: var(--font-size-sm);
         }
@@ -213,81 +271,124 @@
             background-size: 200% 100%;
             animation: shimmer 1.4s infinite;
             border-radius: var(--radius-sm);
-            height: 14px;
-            margin-bottom: 8px;
+            height: 13px;
+            margin-bottom: 7px;
         }
         @keyframes shimmer { to { background-position: -200% 0; } }
-        .skeleton-card {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: var(--space-4);
-        }
-        .skeleton--title { width: 55%; height: 18px; }
-        .skeleton--sub   { width: 30%; height: 11px; }
-        .skeleton--line  { width: 90%; }
-        .skeleton--line2 { width: 75%; }
-
-        /* ── Count badge ── */
-        .count-chip {
-            font-size: var(--font-size-xs);
-            color: var(--text-muted);
-            margin-left: auto;
-            padding: 2px 8px;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-pill);
-        }
+        .skeleton--title { width: 80%; height: 16px; }
+        .skeleton--sub   { width: 45%; height: 11px; }
+        .skeleton--line  { width: 92%; }
+        .skeleton--line2 { width: 68%; }
+        .skeleton--line3 { width: 80%; }
     </style>
 </head>
 <body>
 
-    <!-- Header sticky -->
-    <header class="app-header">
+    <!-- Sticky header -->
+    <header class="app-header" id="appHeader">
         <div class="app-header__top">
             <div class="app-logo">
                 <span class="app-logo__icon">🍹</span>
                 <span class="app-logo__name">RAYITO'S <span>BAR</span></span>
             </div>
-            <button class="app-refresh" id="btnRefresh" title="Recargar datos">
-                <span class="refresh-icon">↺</span>
-                <span id="refreshLabel">Actualizar</span>
-            </button>
+            <div class="search-box">
+                <input type="search" id="searchInput" class="search-input" placeholder="Buscar cóctel o ingrediente…" autocomplete="off">
+            </div>
         </div>
         <div class="filter-bar" id="filterBar">
             <button class="filter-pill active" data-dif="Todos">Todos</button>
-            <button class="filter-pill" data-dif="Básico">Básico</button>
-            <button class="filter-pill" data-dif="Medio">Medio</button>
-            <button class="filter-pill" data-dif="Difícil">Difícil</button>
+            <button class="filter-pill" data-dif="Básico">🟢 Básico</button>
+            <button class="filter-pill" data-dif="Medio">🟡 Medio</button>
+            <button class="filter-pill" data-dif="Difícil">🔴 Difícil</button>
             <span class="count-chip" id="countChip">—</span>
         </div>
     </header>
 
-    <!-- Cards -->
-    <main class="app-content" id="dashboard"></main>
+    <!-- Table -->
+    <main class="app-content">
+        <div class="table-wrapper">
+            <table class="cocktail-table">
+                <thead>
+                    <tr>
+                        <th class="col-coctel">Cóctel</th>
+                        <th class="col-dif" title="Dificultad">●</th>
+                        <th class="col-inventario">🛒 Check de Inventario <span class="th-sub">por persona</span></th>
+                        <th class="col-prebatch">⏱️ Pre-Batch <span class="th-sub">horas antes del evento</span></th>
+                        <th class="col-servicio">🧊 En el Momento <span class="th-sub">servicio</span></th>
+                    </tr>
+                </thead>
+                <tbody id="dashboard"></tbody>
+            </table>
+        </div>
+    </main>
 
     <script src="design-system.js"></script>
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQy-mH5c2DS-vuUmxsnaNlat-atoBcBZTVQYD0dWtoaaFk4ZGDf12oRiPnpWRs69WOk2yZQY3rNlUK/pub?gid=418238946&single=true&output=csv';
 
-        let allDrinks = [];
+        let allDrinks    = [];
         let activeFilter = 'Todos';
+        let searchQuery  = '';
 
-        function difClass(dif) {
-            if (dif === 'Básico')  return 'basico';
-            if (dif === 'Difícil') return 'dificil';
-            return 'medio';
+        /* ─────────────────────────────────────────────
+         *  AUTO-ICON: asigna un emoji al cóctel según
+         *  su nombre. Se evalúan las reglas en orden;
+         *  la primera que haga match gana.
+         * ───────────────────────────────────────────── */
+        const ICON_RULES = [
+            [/espresso martini/i,                                '☕'],
+            [/mojito/i,                                          '🌿'],
+            [/daiquiri/i,                                        '🍓'],
+            [/piña colada|pina colada/i,                         '🍍'],
+            [/cuba libre/i,                                      '🥤'],
+            [/margarita/i,                                       '🌵'],
+            [/tequila sunrise/i,                                 '🌅'],
+            [/paloma/i,                                          '🍊'],
+            [/tequila|mezcal/i,                                  '🌵'],
+            [/whisky sour|whiskey sour/i,                        '🥃'],
+            [/whisky|whiskey|bourbon|manhattan|old fashioned|rusty/i, '🥃'],
+            [/negroni/i,                                         '🍊'],
+            [/gin tonic|gin & tonic|gin and tonic/i,             '🫧'],
+            [/gin|gimlet/i,                                      '🌿'],
+            [/aperol|spritz/i,                                   '🥂'],
+            [/prosecco|champagne|mimosa|cava/i,                  '🥂'],
+            [/bloody mary/i,                                     '🍅'],
+            [/moscow mule/i,                                     '🫚'],
+            [/mai tai/i,                                         '🌺'],
+            [/sex on the beach/i,                                '🏖️'],
+            [/cosmopolitan|cosmo/i,                              '🍸'],
+            [/martini/i,                                         '🍸'],
+            [/ron |rum |ron$|rum$/i,                             '🍹'],
+            [/vodka/i,                                           '🍸'],
+            [/cerveza|beer|michelada/i,                          '🍺'],
+            [/vino|wine/i,                                       '🍷'],
+            [/limonada|lemonade/i,                               '🍋'],
+            [/café|coffee/i,                                     '☕'],
+        ];
+
+        function getCocktailIcon(name) {
+            if (!name) return '🍹';
+            for (const [re, icon] of ICON_RULES) {
+                if (re.test(name)) return icon;
+            }
+            return '🍹';
         }
 
-        function formatCLP(val) {
-            if (!val) return '';
-            const n = parseInt(String(val).replace(/\D/g, ''), 10);
-            if (isNaN(n)) return '';
-            return '$ ' + n.toLocaleString('es-CL');
+        /* ── Normalize difficulty (handles "🟢 Básico" or plain "Básico") ── */
+        function normalizeDif(raw) {
+            if (!raw) return 'Medio';
+            const clean = raw.replace(/[\u{1F7E2}\u{1F7E1}\u{1F534}]/gu, '').trim();
+            if (/^b[aá]sico$/i.test(clean)) return 'Básico';
+            if (/^dif[ií]cil$/i.test(clean)) return 'Difícil';
+            return 'Medio';
         }
 
+        const DIF_ICON  = { 'Básico': '🟢', 'Medio': '🟡', 'Difícil': '🔴' };
+        const DIF_CLASS = { 'Básico': 'basico', 'Medio': 'medio', 'Difícil': 'dificil' };
+
+        /* ── Escape HTML ── */
         function escapeHTML(str) {
-            if (!str) return '—';
+            if (!str) return '';
             return String(str)
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
@@ -295,94 +396,154 @@
                 .replace(/"/g, '&quot;');
         }
 
-        function buildCard(drink) {
-            const dif = drink.Dificultad || 'Medio';
-            const card = document.createElement('article');
-            card.className = 'cocktail-card';
-            card.setAttribute('data-dif', dif);
-
-            card.innerHTML = `
-                <div class="cocktail-card__header">
-                    <div class="cocktail-card__left">
-                        <div class="cocktail-card__name">${escapeHTML(drink.Cóctel)}</div>
-                        <div class="cocktail-card__base">${escapeHTML(drink.Base)}</div>
-                    </div>
-                    <div class="cocktail-card__badges">
-                        <span class="badge--${difClass(dif)}">${escapeHTML(dif)}</span>
-                        ${drink['Costo Aprox (CLP)'] ? `<span class="costo-badge">${formatCLP(drink['Costo Aprox (CLP)'])}</span>` : ''}
-                    </div>
-                </div>
-                <div class="cocktail-section">
-                    <div class="cocktail-section__label"><span class="emoji">🛒</span> Check de Inventario <em style="font-style:normal;color:var(--text-muted)">(por persona)</em></div>
-                    <div class="cocktail-section__body">${escapeHTML(drink['Ingredientes (por persona)'])}</div>
-                </div>
-                <div class="cocktail-section">
-                    <div class="cocktail-section__label"><span class="emoji">⏱️</span> Pre-Batch <em style="font-style:normal;color:var(--text-muted)">(horas antes)</em></div>
-                    <div class="cocktail-section__body">${escapeHTML(drink['Pre-Batch (Horas antes)'])}</div>
-                </div>
-                <div class="cocktail-section">
-                    <div class="cocktail-section__label"><span class="emoji">🧊</span> En el Momento</div>
-                    <div class="cocktail-section__body">${escapeHTML(drink.Servicio)}</div>
-                </div>
-            `;
-            return card;
+        /* ── Render ingredient checklist ──
+         * Soporta separador "◻️" del Excel y saltos de línea.
+         * Ej: "◻️ 50 ml Tequila◻️ 25 ml Triple Sec" → lista visual
+         */
+        function renderIngredients(text) {
+            if (!text || !text.trim()) return '<span style="opacity:.4">—</span>';
+            // Split por el carácter ◻ (con o sin variante emoji \uFE0F)
+            const parts = text.split(/◻\uFE0F?/u).map(s => s.trim()).filter(Boolean);
+            if (parts.length === 0) return escapeHTML(text);
+            return '<div class="ingredient-list">' +
+                parts.map(item =>
+                    `<div class="ingredient-item"><span class="ingredient-check">◻</span><span>${escapeHTML(item)}</span></div>`
+                ).join('') +
+                '</div>';
         }
 
+        /* ── Build a table row ── */
+        function buildRow(drink) {
+            const coctel = (drink['Cóctel'] || drink['Coctel'] || '').trim();
+            const dif    = normalizeDif(drink.Dificultad || '');
+            const icon   = getCocktailIcon(coctel);
+
+            // Support both old column names and new ones (con emoji en el header)
+            const inventario = drink['🛒 Check de Inventario (Por persona)']
+                            || drink['Ingredientes (por persona)']
+                            || '';
+            const prebatch   = drink['⏱️ Pre-Batch (Horas antes del evento)']
+                            || drink['Pre-Batch (Horas antes)']
+                            || '';
+            const servicio   = drink['🧊 En el Momento (Servicio)']
+                            || drink.Servicio
+                            || '';
+
+            const tr = document.createElement('tr');
+            tr.setAttribute('data-dif', dif);
+            tr.innerHTML = `
+                <td>
+                    <div class="coctel-cell">
+                        <span class="coctel-icon" aria-hidden="true">${icon}</span>
+                        <span class="coctel-name">${escapeHTML(coctel)}</span>
+                    </div>
+                </td>
+                <td>
+                    <span class="dif-dot dif-dot--${DIF_CLASS[dif]}" title="${escapeHTML(dif)}"></span>
+                </td>
+                <td>${renderIngredients(inventario)}</td>
+                <td>${escapeHTML(prebatch) || '<span style="opacity:.4">—</span>'}</td>
+                <td>${escapeHTML(servicio) || '<span style="opacity:.4">—</span>'}</td>
+            `;
+            return tr;
+        }
+
+        /* ── Render filtered rows ── */
         function renderDrinks() {
-            const container = document.getElementById('dashboard');
-            container.innerHTML = '';
-            const filtered = activeFilter === 'Todos'
-                ? allDrinks
-                : allDrinks.filter(d => d.Dificultad === activeFilter);
+            const tbody = document.getElementById('dashboard');
+            tbody.innerHTML = '';
+
+            const q = searchQuery.toLowerCase().trim();
+            const filtered = allDrinks.filter(d => {
+                const matchDif = activeFilter === 'Todos' || normalizeDif(d.Dificultad) === activeFilter;
+                if (!q) return matchDif;
+                const haystack = [
+                    d['Cóctel'] || d['Coctel'] || '',
+                    d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '',
+                    d['⏱️ Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '',
+                    d['🧊 En el Momento (Servicio)'] || d.Servicio || '',
+                ].join(' ').toLowerCase();
+                return matchDif && haystack.includes(q);
+            });
 
             document.getElementById('countChip').textContent = filtered.length + ' cócteles';
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="state-msg"><span class="state-msg__icon">🍸</span>Sin resultados para "${activeFilter}"</div>`;
+                const msg = q
+                    ? `Sin resultados para "${escapeHTML(searchQuery)}"`
+                    : `Sin resultados para "${escapeHTML(activeFilter)}"`;
+                tbody.innerHTML = `<tr class="state-row"><td colspan="5">
+                    <span class="state-msg__icon">🍸</span>
+                    ${msg}
+                </td></tr>`;
                 return;
             }
-            filtered.forEach(drink => container.appendChild(buildCard(drink)));
+
+            const frag = document.createDocumentFragment();
+            filtered.forEach(d => frag.appendChild(buildRow(d)));
+            tbody.appendChild(frag);
         }
 
+        /* ── Skeleton loading rows ── */
         function showSkeletons() {
-            const container = document.getElementById('dashboard');
-            container.innerHTML = [1,2,3].map(() => `
-                <div class="skeleton-card">
-                    <div class="skeleton skeleton--title"></div>
-                    <div class="skeleton skeleton--sub" style="margin-bottom:16px"></div>
-                    <div class="skeleton skeleton--line"></div>
-                    <div class="skeleton skeleton--line2"></div>
-                    <div class="skeleton skeleton--line" style="margin-top:12px"></div>
-                    <div class="skeleton skeleton--line2"></div>
-                </div>
+            document.getElementById('dashboard').innerHTML = [1,2,3,4].map(() => `
+                <tr>
+                    <td><div class="skeleton skeleton--title"></div><div class="skeleton skeleton--sub"></div></td>
+                    <td><div class="skeleton" style="width:11px;height:11px;border-radius:50%;margin:auto"></div></td>
+                    <td>
+                        <div class="skeleton skeleton--line"></div>
+                        <div class="skeleton skeleton--line2"></div>
+                        <div class="skeleton skeleton--line3"></div>
+                    </td>
+                    <td>
+                        <div class="skeleton skeleton--line"></div>
+                        <div class="skeleton skeleton--line2"></div>
+                    </td>
+                    <td>
+                        <div class="skeleton skeleton--line"></div>
+                        <div class="skeleton skeleton--line2"></div>
+                    </td>
+                </tr>
             `).join('');
         }
 
+        /* ── Load from Google Sheets CSV ── */
         function loadCocktails() {
             showSkeletons();
-            const btn = document.getElementById('btnRefresh');
-            btn.classList.add('spinning');
-            document.getElementById('refreshLabel').textContent = 'Cargando…';
-
             Papa.parse(CSV_URL + '&t=' + Date.now(), {
                 download: true,
                 header: true,
                 complete: function(results) {
-                    allDrinks = results.data.filter(d => d.Cóctel && d.Cóctel.trim());
+                    allDrinks = results.data.filter(d =>
+                        (d['Cóctel'] || d['Coctel'] || '').trim()
+                    );
                     renderDrinks();
-                    btn.classList.remove('spinning');
-                    document.getElementById('refreshLabel').textContent = 'Actualizar';
                 },
                 error: function() {
                     document.getElementById('dashboard').innerHTML =
-                        `<div class="state-msg"><span class="state-msg__icon">⚠️</span>No se pudo cargar la data.<br>Verifica tu conexión.</div>`;
-                    btn.classList.remove('spinning');
-                    document.getElementById('refreshLabel').textContent = 'Reintentar';
+                        `<tr class="state-row"><td colspan="5">
+                            <span class="state-msg__icon">⚠️</span>
+                            No se pudo cargar la data.<br>Verifica tu conexión.
+                        </td></tr>`;
                 }
             });
         }
 
-        // Filtros
+        /* ── Sticky header offset for thead ── */
+        function syncStickyOffset() {
+            const h = document.getElementById('appHeader').offsetHeight;
+            document.documentElement.style.setProperty('--header-h', h + 'px');
+        }
+        window.addEventListener('resize', syncStickyOffset);
+        syncStickyOffset();
+
+        /* ── Search ── */
+        document.getElementById('searchInput').addEventListener('input', function() {
+            searchQuery = this.value;
+            renderDrinks();
+        });
+
+        /* ── Filtros ── */
         document.getElementById('filterBar').addEventListener('click', function(e) {
             const pill = e.target.closest('.filter-pill');
             if (!pill) return;
@@ -392,10 +553,7 @@
             renderDrinks();
         });
 
-        // Refresh manual
-        document.getElementById('btnRefresh').addEventListener('click', loadCocktails);
-
-        // Carga inicial
+        /* ── Carga inicial ── */
         loadCocktails();
     </script>
 </body>
