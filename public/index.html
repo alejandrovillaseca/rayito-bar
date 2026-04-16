@@ -448,7 +448,7 @@
             // 2º si quedó solo un item, intenta separar por salto de línea o coma
             if (parts.length <= 1) {
                 const raw = parts[0] || text.trim();
-                parts = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+                parts = raw.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean);
             }
             if (parts.length <= 1) return `<span>${escapeHTML(parts[0] || text.trim())}</span>`;
             return '<ul class="ingredient-list">' +
