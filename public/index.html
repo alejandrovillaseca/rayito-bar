@@ -6,7 +6,7 @@
     <title>Rayito's Bar — Guía de Cócteles</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23181A20'/%3E%3Cg fill='%23C86400'%3E%3Cpolygon points='16,12 48,12 36,34 36,52 28,52 28,34' fill='none' stroke='%23C86400' stroke-width='3.5' stroke-linejoin='round'/%3E%3Crect x='22' y='52' width='20' height='3.5' rx='1.75'/%3E%3Ccircle cx='44' cy='30' r='5' fill='%23C86400'/%3E%3Cline x1='44' y1='25' x2='44' y2='18' stroke='%23C86400' stroke-width='2.5' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="design-system.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
@@ -40,6 +40,8 @@
             align-items: center;
             gap: var(--space-2);
             flex-shrink: 0;
+            cursor: pointer;
+            user-select: none;
         }
         .app-logo__icon { font-size: 1.3rem; line-height: 1; }
         .app-logo__name {
@@ -322,6 +324,1128 @@
         .skeleton--line  { width: 92%; }
         .skeleton--line2 { width: 68%; }
         .skeleton--line3 { width: 80%; }
+
+        /* ── Mi Barra nav button ── */
+        .nav-btn-mibar {
+            flex-shrink: 0;
+            padding: 7px 14px;
+            border-radius: var(--radius-pill);
+            font-size: var(--font-size-sm);
+            font-weight: 700;
+            cursor: pointer;
+            border: 1.5px solid var(--accent-orange);
+            background: transparent;
+            color: var(--accent-orange);
+            white-space: nowrap;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .nav-btn-mibar:hover,
+        .nav-btn-mibar.active { background: var(--accent-orange); color: #fff; }
+
+        /* ── Page system ── */
+        .page-home.hidden,
+        .page-mibar.hidden { display: none; }
+
+        /* ── Mi Barra page ── */
+        .page-mibar { padding-bottom: 90px; }
+        .mibar-content {
+            padding: var(--space-4);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .mibar-topbar {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-2);
+        }
+        .btn-back {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: var(--radius-pill);
+            padding: 5px 12px;
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .btn-back:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+        .mibar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .mibar-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--text-muted);
+            margin-bottom: var(--space-3);
+            line-height: 1.6;
+        }
+        .ing-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: var(--space-2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .btn-clear-sel {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            font-family: inherit;
+            padding: 0;
+            transition: color 0.15s;
+            text-transform: none;
+            letter-spacing: 0;
+            font-weight: 400;
+        }
+        .btn-clear-sel:hover { color: var(--text-secondary); }
+        .ingredient-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+        .ing-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 14px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border-color);
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+            font-family: inherit;
+        }
+        .ing-chip:hover { border-color: var(--text-muted); color: var(--text-primary); }
+        .ing-chip.selected {
+            background: rgba(200,100,0,0.15);
+            border-color: var(--accent-orange);
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+        .ing-chip.selected::before { content: '✓ '; }
+        /* Sticky CTA bar */
+        .mibar-cta-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-panel);
+            border-top: 1px solid var(--border-color);
+            padding: 14px var(--space-4);
+            display: flex;
+            gap: var(--space-3);
+            align-items: center;
+            z-index: 200;
+        }
+        .mibar-counter {
+            flex: 1;
+            font-size: var(--font-size-sm);
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .btn-gen-carta {
+            padding: 10px 24px;
+            border-radius: var(--radius-pill);
+            background: var(--accent-orange);
+            color: #fff;
+            font-weight: 700;
+            font-size: var(--font-size-sm);
+            border: none;
+            cursor: pointer;
+            transition: filter 0.15s;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+        .btn-gen-carta:hover { filter: brightness(1.1); }
+        .btn-gen-carta:disabled { opacity: 0.35; cursor: default; filter: none; }
+
+        /* ── Mi Barra 2-col layout ── */
+        .mibar-layout {
+            display: grid;
+            grid-template-columns: 1fr 290px;
+            gap: var(--space-4);
+            align-items: start;
+        }
+        @media (max-width: 720px) {
+            .mibar-layout { grid-template-columns: 1fr; }
+        }
+        .mibar-left { min-width: 0; }
+        .mibar-right { position: sticky; top: 58px; }
+
+        /* Ingredient search */
+        .ing-search-wrap { margin-bottom: var(--space-3); }
+        .ing-search-input {
+            width: 100%;
+            box-sizing: border-box;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-pill);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: var(--font-size-sm);
+            padding: 7px 14px 7px 32px;
+            outline: none;
+            transition: border-color 0.15s;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 10px center;
+        }
+        .ing-search-input:focus { border-color: var(--accent-orange); }
+        .ing-search-input::placeholder { color: var(--text-muted); }
+        .ing-chip.ing-hidden { display: none; }
+
+        /* Real-time cocktail panel */
+        .realtime-panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .realtime-panel-hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px var(--space-3);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .rt-count { color: #4ade80; font-size: var(--font-size-xs); font-weight: 700; }
+        .rt-drinks-list {
+            max-height: 60vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+        .rt-drinks-list::-webkit-scrollbar { width: 4px; }
+        .rt-drinks-list::-webkit-scrollbar-track { background: transparent; }
+        .rt-drinks-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 2px; }
+        .rt-empty {
+            text-align: center;
+            padding: 28px var(--space-3);
+            color: var(--text-muted);
+            font-size: var(--font-size-sm);
+            line-height: 1.7;
+        }
+        .rt-section-label {
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 10px var(--space-3) 4px;
+            opacity: 0.65;
+        }
+        .rt-drink-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 9px var(--space-3);
+            border-bottom: 1px solid rgba(255,255,255,0.035);
+            transition: background 0.1s;
+        }
+        .rt-drink-item:last-child { border-bottom: none; }
+        .rt-drink-item:hover { background: var(--bg-elevated); }
+        .rt-drink-icon { font-size: 1rem; flex-shrink: 0; }
+        .rt-drink-name {
+            flex: 1;
+            font-size: var(--font-size-sm);
+            color: var(--text-muted);
+            font-weight: 500;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .rt-drink-item.rt--ready .rt-drink-name { color: var(--text-primary); }
+        .rt-badge {
+            flex-shrink: 0;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: var(--radius-pill);
+            white-space: nowrap;
+        }
+        .rt-badge--ready { background: rgba(22,163,74,0.18); color: #4ade80; }
+        .rt-badge--1     { background: rgba(200,100,0,0.18); color: #fb923c; }
+        .rt-badge--2     { background: rgba(234,179,8,0.12); color: #fbbf24; }
+        .rt-badge--many  { background: var(--bg-elevated); color: var(--text-muted); }
+
+        /* ── Tooltip global ── */
+        .app-tooltip {
+            position: fixed;
+            z-index: 9999;
+            background: var(--bg-elevated);
+            border: 1px solid rgba(200,100,0,0.4);
+            color: var(--text-primary);
+            font-size: 0.72rem;
+            font-weight: 500;
+            font-family: var(--font-family);
+            padding: 5px 11px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            pointer-events: none;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.12s;
+        }
+        .app-tooltip.visible { opacity: 1; }
+
+        /* ── Carta publicada banner (home) ── */
+        .carta-pub-wrap {
+            padding: var(--space-4) var(--space-4) 0;
+        }
+        .carta-publicada-banner {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            background: linear-gradient(120deg, rgba(200,100,0,0.10) 0%, var(--bg-panel) 100%);
+            border: 1px solid rgba(200,100,0,0.35);
+            border-radius: var(--radius-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        .carta-publicada-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 0% 50%, rgba(200,100,0,0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .carta-pub-icon { font-size: 2.2rem; flex-shrink: 0; }
+        .carta-pub-meta { flex: 1; min-width: 0; }
+        .carta-pub-title {
+            font-size: var(--font-size-sm);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+        }
+        .carta-pub-sub {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+        }
+        .carta-pub-sub strong { color: #4ade80; }
+        .carta-pub-actions { display: flex; gap: var(--space-2); flex-shrink: 0; }
+        .btn-ver-pub {
+            padding: 8px 18px;
+            border-radius: var(--radius-pill);
+            background: var(--accent-orange);
+            border: none;
+            color: #fff;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: opacity 0.15s;
+        }
+        .btn-ver-pub:hover { opacity: 0.85; }
+        .btn-retirar-pub {
+            padding: 7px 13px;
+            border-radius: var(--radius-pill);
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: var(--font-size-xs);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        .btn-retirar-pub:hover { border-color: #dc2626; color: #dc2626; }
+
+        /* ── Historial de cartas ── */
+        .historia-sec {
+            margin-top: var(--space-5);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--border-color);
+        }
+        .historia-sec-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: var(--space-3);
+        }
+        .historia-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: 12px var(--space-3);
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-2);
+            transition: border-color 0.15s;
+        }
+        .historia-item:hover { border-color: rgba(200,100,0,0.35); }
+        .historia-meta { flex: 1; min-width: 0; }
+        .historia-date {
+            display: block;
+            font-size: var(--font-size-sm);
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .historia-badges { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+        .historia-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+        }
+        .historia-badge--ready { background: rgba(22,163,74,0.15); color: #4ade80; }
+        .historia-badge--ing   { background: var(--bg-elevated); color: var(--text-muted); }
+        .historia-actions { display: flex; gap: var(--space-2); flex-shrink: 0; }
+        .btn-ver-historia {
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            background: transparent;
+            border: 1px solid var(--accent-orange);
+            color: var(--accent-orange);
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .btn-ver-historia:hover { background: var(--accent-orange); color: #fff; }
+        .btn-del-historia {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: var(--radius-pill);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .btn-del-historia:hover { border-color: #dc2626; color: #dc2626; }
+
+        /* ── Botón historial en topbar ── */
+        .btn-historial {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: var(--radius-pill);
+            padding: 5px 12px;
+            cursor: pointer;
+            font-size: var(--font-size-xs);
+            font-family: inherit;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .btn-historial.visible { display: inline-flex; }
+        .btn-historial:hover { border-color: rgba(200,100,0,0.5); color: var(--text-primary); }
+
+        /* ── Historial popup overlay ── */
+        .historial-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 350;
+            background: rgba(0,0,0,0.72);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: var(--space-4);
+            overflow-y: auto;
+        }
+        .historial-overlay.hidden { display: none; }
+        .historial-popup {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 540px;
+            padding: 24px 20px;
+            position: relative;
+            margin-top: 56px;
+        }
+        .historial-popup-hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .historial-popup-title {
+            font-size: var(--font-size-sm);
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .historial-close-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: var(--radius-pill);
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: var(--font-size-xs);
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        .historial-close-btn:hover { color: var(--text-primary); border-color: var(--text-muted); }
+        .historial-empty {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: var(--font-size-sm);
+            padding: 32px 0;
+        }
+
+        /* ── Selector de formato de carta ── */
+        .formato-sec {
+            margin: 28px 0 0;
+            padding-bottom: 4px;
+        }
+        .formato-sec-title {
+            font-size: var(--font-size-sm);
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 14px;
+        }
+        .formato-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-2);
+        }
+        @media (max-width: 600px) {
+            .formato-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        .formato-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 14px 8px;
+            background: var(--bg-panel);
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .formato-card:hover { border-color: rgba(200,100,0,0.45); }
+        .formato-card.selected { border-color: var(--accent-orange); background: rgba(200,100,0,0.08); }
+        .formato-icon { font-size: 1.7rem; line-height: 1; }
+        .formato-name { font-size: var(--font-size-sm); font-weight: 700; color: var(--text-primary); }
+        .formato-desc { font-size: 0.62rem; color: var(--text-muted); text-align: center; line-height: 1.3; }
+
+        /* ── Carta overlay ── */
+        .carta-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 400;
+            background: rgba(0,0,0,0.78);
+            overflow-y: auto;
+            padding: var(--space-4);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .carta-overlay.hidden { display: none; }
+        .carta-paper {
+            background: #0d0f14;
+            border: 1px solid #2a2d35;
+            border-radius: 14px;
+            width: 100%;
+            max-width: 580px;
+            padding: 40px 36px;
+            position: relative;
+            margin: 0 auto;
+        }
+        @media (max-width: 640px) { .carta-paper { padding: 32px 20px; } }
+        .carta-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: var(--radius-pill);
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: var(--font-size-xs);
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .carta-close-btn:hover { color: var(--text-primary); border-color: var(--text-muted); }
+        .carta-header-section {
+            text-align: center;
+            margin-bottom: 36px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(200,100,0,0.25);
+        }
+        .carta-ornament {
+            color: var(--accent-orange);
+            font-size: 0.75rem;
+            letter-spacing: 0.35em;
+            margin-bottom: 10px;
+        }
+        .carta-bar-name {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .carta-bar-name span { color: var(--accent-orange); }
+        .carta-tagline {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        .carta-section-heading {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent-orange);
+            text-align: center;
+            margin: 28px 0 24px;
+        }
+        .carta-item { margin-bottom: 4px; }
+        .carta-item-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .carta-item-icon { font-size: 1.35rem; line-height: 1; flex-shrink: 0; padding-top: 2px; }
+        .carta-item-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .carta-dif-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .carta-item-info {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding-left: 47px;
+        }
+        .carta-item-info em {
+            font-style: normal;
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: block;
+            margin-top: 8px;
+            margin-bottom: 1px;
+        }
+        .carta-divider {
+            text-align: center;
+            color: rgba(200,100,0,0.35);
+            font-size: 0.65rem;
+            letter-spacing: 0.4em;
+            margin: 20px 0;
+        }
+        .carta-item--partial { opacity: 0.5; }
+        .carta-missing {
+            font-size: 0.68rem;
+            color: #f87171;
+            margin-top: 6px;
+            padding-left: 47px;
+        }
+        .carta-footer-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid rgba(200,100,0,0.25);
+        }
+        .carta-footer-text {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        .carta-print-btn {
+            margin-top: 20px;
+            padding: 8px 24px;
+            border-radius: var(--radius-pill);
+            background: transparent;
+            border: 1px solid var(--accent-orange);
+            color: var(--accent-orange);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .carta-print-btn:hover { background: var(--accent-orange); color: #fff; }
+        @media print {
+            .carta-close-btn, .carta-print-btn, .mibar-cta-bar, .app-header { display: none !important; }
+            .carta-overlay { position: static; background: none; padding: 0; }
+            .carta-paper { border: none; max-width: 100%; }
+        }
+
+        /* ══════════════════════════════════════════════
+         *  NEON SHOW — Slideshow de presentación
+         * ══════════════════════════════════════════════ */
+        .neon-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            background: #08080f;
+            overflow: hidden;
+        }
+        .neon-overlay.hidden { display: none; }
+
+        .neon-slide-wrap {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ── Slide base ── */
+        .neon-slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 72px 80px 60px;
+            text-align: center;
+        }
+        .neon-slide--drink,
+        .neon-slide--drink .neon-slide-inner {
+            align-items: flex-start;
+            text-align: left;
+        }
+        .neon-slide-inner {
+            max-width: 700px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Slide: title ── */
+        .neon-slide--title {
+            background: radial-gradient(ellipse at 30% 45%, #0c1a30 0%, #08080f 65%);
+        }
+        .neon-supertitle {
+            color: #00e5cc;
+            font-size: 0.72rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 18px;
+        }
+        .neon-maintitle {
+            font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
+            font-size: clamp(3.5rem, 13vw, 8rem);
+            font-weight: 900;
+            color: #ff2b6e;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            line-height: 0.88;
+            margin-bottom: 28px;
+        }
+        .neon-tagline {
+            font-size: clamp(0.85rem, 2vw, 1.05rem);
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 10px;
+        }
+        .neon-title-count {
+            font-size: 0.78rem;
+            color: #00e5cc;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        /* ── Slide: drink ── */
+        .neon-slide--drink {
+            background: #08080f;
+        }
+        .neon-dif-tag {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .neon-drink-icon {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+        .neon-drink-name {
+            font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
+            font-size: clamp(2.5rem, 10vw, 5.5rem);
+            font-weight: 900;
+            color: #ff2b6e;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            line-height: 0.9;
+            margin-bottom: 22px;
+        }
+        .neon-ing-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px;
+            border-top: 1px solid rgba(0,229,204,0.12);
+        }
+        .neon-ing-list li {
+            color: rgba(255,255,255,0.78);
+            font-size: clamp(0.78rem, 1.8vw, 0.98rem);
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .neon-ing-list li::before {
+            content: '▶';
+            color: #00e5cc;
+            font-size: 0.55em;
+            flex-shrink: 0;
+        }
+        .neon-ing-more {
+            color: rgba(255,255,255,0.3) !important;
+            font-style: italic;
+        }
+        .neon-prep-line {
+            font-size: clamp(0.75rem, 1.5vw, 0.88rem);
+            color: rgba(255,255,255,0.45);
+            margin-top: 5px;
+        }
+        .neon-prep-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #00e5cc;
+            font-weight: 700;
+            margin-right: 6px;
+        }
+
+        /* ── Slide: salud ── */
+        .neon-slide--salud {
+            background: radial-gradient(ellipse at 65% 55%, #1a0020 0%, #08080f 70%);
+        }
+        .neon-salud-sub {
+            color: rgba(255,255,255,0.45);
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .neon-salud-main {
+            font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
+            font-size: clamp(4rem, 18vw, 10rem);
+            font-weight: 900;
+            color: #ff2b6e;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            line-height: 0.88;
+            margin-bottom: 24px;
+        }
+        .neon-salud-count {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.95rem;
+        }
+
+        /* ── Controles ── */
+        .neon-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: rgba(255,255,255,0.65);
+            font-size: 0.82rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 10;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        .neon-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+        .neon-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.6);
+            font-size: 2.4rem;
+            width: 54px;
+            height: 110px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.2s, color 0.2s, opacity 0.2s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+        }
+        .neon-nav:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .neon-nav[disabled] { opacity: 0.18; pointer-events: none; }
+        .neon-nav--prev { left: 10px; }
+        .neon-nav--next { right: 10px; }
+
+        .neon-counter {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.28);
+            font-size: 0.78rem;
+            letter-spacing: 0.18em;
+            z-index: 10;
+            white-space: nowrap;
+        }
+        .neon-publish-btn {
+            position: absolute;
+            bottom: 14px;
+            right: 14px;
+            background: #ff2b6e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            cursor: pointer;
+            z-index: 10;
+            font-family: inherit;
+            transition: opacity 0.15s;
+        }
+        .neon-publish-btn:hover { opacity: 0.82; }
+
+        /* Dots progress indicator */
+        .neon-dots {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+            align-items: center;
+        }
+        .neon-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .neon-dot.active {
+            background: #ff2b6e;
+            transform: scale(1.4);
+        }
+
+        /* ── Slide: filosofía ── */
+        .neon-slide--filosofia {
+            background: #08080f;
+        }
+        .neon-fil-title {
+            font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
+            font-size: clamp(2rem, 7vw, 4rem);
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0.08em;
+            margin-bottom: 20px;
+        }
+        .neon-fil-line {
+            width: 80px;
+            height: 3px;
+            background: #00e5cc;
+            border-radius: 2px;
+            margin: 0 auto 28px;
+        }
+        .neon-fil-text {
+            font-size: clamp(0.9rem, 2vw, 1.15rem);
+            color: rgba(255,255,255,0.6);
+            line-height: 1.75;
+            max-width: 560px;
+        }
+
+        /* ── Slide: pair (2 cócteles lado a lado) ── */
+        .neon-slide--pair {
+            background: #08080f;
+            align-items: stretch;
+            justify-content: stretch;
+            padding: 110px 56px 70px;
+            position: relative;
+        }
+        .neon-pair-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            width: 100%;
+            max-width: 860px;
+            margin: 0 auto;
+            align-self: center;
+        }
+        .neon-pair-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            display: flex;
+            overflow: hidden;
+        }
+        .neon-pair-accent {
+            width: 4px;
+            flex-shrink: 0;
+            border-radius: 0;
+        }
+        .neon-pair-body {
+            padding: 20px 18px;
+            flex: 1;
+        }
+        .neon-pair-icon { font-size: 1.6rem; margin-bottom: 6px; }
+        .neon-pair-name {
+            font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
+            font-size: clamp(1.3rem, 3.5vw, 2rem);
+            font-weight: 900;
+            color: #ff2b6e;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            line-height: 0.95;
+            margin-bottom: 12px;
+        }
+        .neon-pair-ing {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 10px;
+        }
+        .neon-pair-ing li {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.65);
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .neon-pair-ing li::before {
+            content: '▶';
+            color: #00e5cc;
+            font-size: 0.45em;
+            flex-shrink: 0;
+        }
+
+        /* ── Slide: photo split (imagen izquierda, info derecha — como el PDF) ── */
+        .neon-slide--photo {
+            display: grid;
+            grid-template-columns: 44% 56%;
+            padding: 0;
+            align-items: stretch;
+            text-align: left;
+        }
+        .neon-photo-left {
+            position: relative;
+            overflow: hidden;
+        }
+        .neon-photo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        /* Si la imagen falla, ocultar el panel izquierdo y expandir el derecho */
+        .neon-photo--broken {
+            grid-template-columns: 1fr;
+        }
+        .neon-photo--broken .neon-photo-left { display: none; }
+        .neon-photo-right {
+            padding: 56px 64px 72px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .neon-photo-category {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .neon-photo-name {
+            font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            font-weight: 900;
+            color: #00e5cc;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            line-height: 0.92;
+            margin-bottom: 24px;
+        }
+        .neon-photo-ing {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 18px;
+        }
+        .neon-photo-ing li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.82);
+            font-size: clamp(0.85rem, 1.8vw, 1rem);
+        }
+        .neon-photo-ing li::before {
+            content: '⚡';
+            color: #00e5cc;
+            font-size: 0.8em;
+            flex-shrink: 0;
+        }
+
+        /* ── Pair slide: header como el PDF ── */
+        .neon-pair-header {
+            font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
+            font-size: clamp(1.4rem, 4vw, 2.4rem);
+            font-weight: 900;
+            color: #00e5cc;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: absolute;
+            top: 44px;
+            left: 56px;
+        }
     </style>
 </head>
 <body>
@@ -329,13 +1453,14 @@
     <!-- Sticky header: 2 filas -->
     <header class="app-header" id="appHeader">
         <div class="app-header__top">
-            <div class="app-logo">
+            <div class="app-logo" id="btnHome">
                 <span class="app-logo__icon">🍹</span>
                 <span class="app-logo__name">RAYITO'S <span>BAR</span></span>
             </div>
             <div class="search-box">
                 <input type="search" id="searchInput" class="search-input" placeholder="Buscar…" autocomplete="off">
             </div>
+            <button class="nav-btn-mibar" id="btnMiBar">🍸 Mi Barra</button>
         </div>
         <div class="filter-bar" id="filterBar">
             <button class="filter-pill active" data-dif="Todos">Todos</button>
@@ -346,7 +1471,22 @@
         </div>
     </header>
 
-    <!-- Table -->
+    <!-- Home page -->
+    <div id="pageHome" class="page-home">
+    <!-- Carta publicada -->
+    <div id="cartaPubWrap" class="carta-pub-wrap" style="display:none">
+        <div class="carta-publicada-banner">
+            <div class="carta-pub-icon">🍸</div>
+            <div class="carta-pub-meta">
+                <div class="carta-pub-title">Carta publicada</div>
+                <div class="carta-pub-sub"><strong id="pubReadyCount"></strong> · <span id="pubDate"></span></div>
+            </div>
+            <div class="carta-pub-actions">
+                <button class="btn-ver-pub" id="btnVerPub">Ver carta</button>
+                <button class="btn-retirar-pub" id="btnRetirarPub">Retirar</button>
+            </div>
+        </div>
+    </div>
     <main class="app-content">
         <div class="table-wrapper">
             <table class="cocktail-table">
@@ -362,8 +1502,101 @@
             </table>
         </div>
     </main>
+    </div><!-- /pageHome -->
+
+    <!-- Mi Barra page -->
+    <div id="pageMiBar" class="page-mibar hidden">
+        <div class="mibar-content">
+            <div class="mibar-topbar">
+                <button class="btn-back" id="btnBack">← Volver</button>
+                <div class="mibar-title">🍸 Mi Barra</div>
+                <button class="btn-historial" id="btnHistorial">📋 Historial</button>
+            </div>
+            <p class="mibar-subtitle">Marca los ingredientes que tienes en casa y ve en tiempo real qué cócteles puedes preparar.</p>
+            <div class="mibar-layout">
+                <!-- Columna izquierda: buscador + chips -->
+                <div class="mibar-left">
+                    <div class="ing-search-wrap">
+                        <input type="search" id="ingSearch" class="ing-search-input" placeholder="Buscar ingrediente…" autocomplete="off">
+                    </div>
+                    <div class="ing-section-label">
+                        <span id="ingLabel">Ingredientes</span>
+                        <button class="btn-clear-sel" id="btnClearSel">Limpiar selección</button>
+                    </div>
+                    <div class="ingredient-grid" id="ingredientGrid"></div>
+                </div>
+                <!-- Columna derecha: panel en tiempo real -->
+                <div class="mibar-right">
+                    <div class="realtime-panel">
+                        <div class="realtime-panel-hdr">
+                            <span>Cócteles disponibles</span>
+                            <span class="rt-count" id="rtCount"></span>
+                        </div>
+                        <div id="realtimeDrinks" class="rt-drinks-list">
+                            <div class="rt-empty">Selecciona ingredientes<br>para ver tu avance 🍸</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Formato de carta -->
+            <div class="formato-sec" id="formatoSec">
+                <div class="formato-sec-title">⚡ Modo Presentación</div>
+                <div class="formato-grid" id="formatoGrid">
+                    <button class="formato-card selected" data-formato="neon">
+                        <span class="formato-icon">⚡</span>
+                        <span class="formato-name">Neon Show</span>
+                        <span class="formato-desc">Slideshow tablet</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mibar-cta-bar">
+            <div class="mibar-counter" id="mibarCounter">Selecciona ingredientes para generar tu carta</div>
+            <button class="btn-gen-carta" id="btnGenCarta" disabled>Ver mi carta</button>
+        </div>
+    </div>
+
+    <!-- Carta overlay -->
+    <div id="cartaOverlay" class="carta-overlay hidden">
+        <div class="carta-paper">
+            <button class="carta-close-btn" id="cartaClose">✕ Cerrar</button>
+            <div class="carta-header-section">
+                <div class="carta-ornament">✦ ✦ ✦</div>
+                <div class="carta-bar-name">RAYITO'S <span>BAR</span></div>
+                <div class="carta-tagline">— Tu Carta de Esta Noche —</div>
+                <div class="carta-ornament" style="margin-top:10px;margin-bottom:0">✦ ✦ ✦</div>
+            </div>
+            <div id="cartaContent"></div>
+            <div class="carta-footer-section">
+                <div class="carta-footer-text">✦ Disfruta con responsabilidad ✦</div>
+                <button class="carta-print-btn" id="btnPublicarCarta">📌 Publicar carta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Neon Slideshow overlay -->
+    <div id="neonOverlay" class="neon-overlay hidden">
+        <div class="neon-slide-wrap" id="neonSlideWrap"></div>
+        <button class="neon-close" id="neonClose">✕ Cerrar</button>
+        <button class="neon-nav neon-nav--prev" id="neonPrev">‹</button>
+        <button class="neon-nav neon-nav--next" id="neonNext">›</button>
+        <div class="neon-dots" id="neonDots"></div>
+        <button class="neon-publish-btn" id="neonPublish" style="display:none">📌 Publicar carta</button>
+    </div>
+
+    <!-- Historial popup -->
+    <div id="historialOverlay" class="historial-overlay hidden">
+        <div class="historial-popup">
+            <div class="historial-popup-hdr">
+                <div class="historial-popup-title">📋 Historial de cartas</div>
+                <button class="historial-close-btn" id="historialClose">✕ Cerrar</button>
+            </div>
+            <div id="cartaHistory"></div>
+        </div>
+    </div>
 
     <script src="design-system.js"></script>
+    <div id="appTooltip" class="app-tooltip"></div>
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQy-mH5c2DS-vuUmxsnaNlat-atoBcBZTVQYD0dWtoaaFk4ZGDf12oRiPnpWRs69WOk2yZQY3rNlUK/pub?gid=418238946&single=true&output=csv';
 
@@ -413,6 +1646,46 @@
                 if (re.test(name)) return icon;
             }
             return '🍹';
+        }
+
+        /* ─────────────────────────────────────────────
+         *  REPOSITORIO DE IMÁGENES
+         *  Imágenes locales en /img/drinks/.
+         *  Agrega más: copia la foto a esa carpeta y
+         *  agrega una línea aquí con el regex del nombre.
+         * ───────────────────────────────────────────── */
+        const DRINK_IMAGE_RULES = [
+            [/old fashioned/i,              '/img/drinks/old-fashioned.jpg'],
+            [/negroni/i,                    '/img/drinks/negroni.jpg'],
+            [/mojito/i,                     '/img/drinks/mojito.jpg'],
+            [/margarita/i,                  '/img/drinks/margarita.jpg'],
+            [/daiquiri/i,                   '/img/drinks/daiquiri.jpg'],
+            [/piña colada|pina colada/i,    '/img/drinks/pina-colada.jpg'],
+            [/aperol|spritz/i,              '/img/drinks/aperol-spritz.jpg'],
+            [/gin tonic|gin & tonic/i,      '/img/drinks/gin-tonic.jpg'],
+            [/espresso martini/i,           '/img/drinks/espresso-martini.jpg'],
+            [/cosmopolitan|cosmo/i,         '/img/drinks/cosmopolitan.jpg'],
+            [/bloody mary/i,                '/img/drinks/bloody-mary.jpg'],
+            [/moscow mule/i,                '/img/drinks/moscow-mule.jpg'],
+            [/mai tai/i,                    '/img/drinks/mai-tai.jpg'],
+            [/manhattan/i,                  '/img/drinks/manhattan.jpg'],
+            [/whisky sour|whiskey sour/i,   '/img/drinks/whisky-sour.jpg'],
+            [/whisky|whiskey|bourbon/i,     '/img/drinks/whisky.jpg'],
+            [/tequila sunrise/i,            '/img/drinks/tequila-sunrise.jpg'],
+            [/paloma/i,                     '/img/drinks/paloma.jpg'],
+            [/cuba libre/i,                 '/img/drinks/cuba-libre.jpg'],
+            [/sex on the beach/i,           '/img/drinks/sex-on-the-beach.jpg'],
+            [/tequila|mezcal/i,             '/img/drinks/tequila.jpg'],
+            [/gin|gimlet/i,                 '/img/drinks/gin.jpg'],
+            [/ron |rum |ron$|rum$/i,        '/img/drinks/ron.jpg'],
+        ];
+
+        function getDrinkImage(name) {
+            if (!name) return null;
+            for (const [re, url] of DRINK_IMAGE_RULES) {
+                if (re.test(name)) return url;
+            }
+            return null;
         }
 
         /* ── Normalize difficulty (handles "🟢 Básico" or plain "Básico") ── */
@@ -564,6 +1837,9 @@
                         (d['Cóctel'] || d['Coctel'] || '').trim()
                     );
                     renderDrinks();
+                    if (!document.getElementById('pageMiBar').classList.contains('hidden')) {
+                        renderMiBarraPage();
+                    }
                 },
                 error: function() {
                     document.getElementById('dashboard').innerHTML =
@@ -595,6 +1871,803 @@
 
         /* ── Carga inicial ── */
         loadCocktails();
+
+        /* ═══════════════════════════════════════════════
+         *  MI BARRA — Selector de ingredientes + Carta
+         * ═══════════════════════════════════════════════ */
+
+        let selectedIngredients = new Set(
+            JSON.parse(localStorage.getItem('rayito-bar-ingredients') || '[]')
+        );
+
+        let selectedFormat = 'neon';
+
+        function capitalize(str) {
+            if (!str) return '';
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        /* Quita cantidad inicial: "50ml Tequila" → "Tequila" */
+        function stripQty(str) {
+            return str
+                .replace(/^[\d.,]+\s*(ml|cl|oz|dl|l|g|cc|cdas?\.?|cucharadas?|tazas?|chupitos?|shots?|chorros?|partes?|gotas?|pizcas?)?\s+/i, '')
+                .replace(/^\d+\s+(?=[a-záéíóúñü])/i, '')
+                .trim();
+        }
+
+        function normalizeIngKey(str) {
+            return stripQty(str).toLowerCase().replace(/\s+/g, ' ').trim();
+        }
+
+        /* Misma lógica de separadores que renderIngredients */
+        function parseIngList(text) {
+            if (!text || !text.trim()) return [];
+            let parts = text.split(/◻\uFE0F?/u).map(s => s.trim()).filter(Boolean);
+            if (parts.length <= 1) {
+                const raw = parts[0] || text.trim();
+                parts = raw.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean);
+            }
+            return parts;
+        }
+
+        function extractAllIngredients(drinks) {
+            const map = new Map(); // normalizedKey → displayName
+            drinks.forEach(d => {
+                const raw = d['🛒 Check de Inventario (Por persona)']
+                         || d['Ingredientes (por persona)'] || '';
+                parseIngList(raw).forEach(item => {
+                    const key = normalizeIngKey(item);
+                    if (!key || key.length < 2) return;
+                    if (!map.has(key)) {
+                        map.set(key, capitalize(stripQty(item)));
+                    }
+                });
+            });
+            return [...map.entries()].sort((a, b) => a[1].localeCompare(b[1], 'es'));
+        }
+
+        function getDrinkIngKeys(drink) {
+            const raw = drink['🛒 Check de Inventario (Por persona)']
+                     || drink['Ingredientes (por persona)'] || '';
+            return parseIngList(raw).map(normalizeIngKey).filter(k => k && k.length >= 2);
+        }
+
+        /* Fuzzy: "limón sutil" selected → matches cocktail needing "limón" and vice versa */
+        function matchScore(drinkKeys, selected) {
+            const missing = drinkKeys.filter(k =>
+                ![...selected].some(s => s.includes(k) || k.includes(s))
+            );
+            return { canMake: missing.length === 0, missing };
+        }
+
+        function renderMiBarraPage() {
+            const allIng = extractAllIngredients(allDrinks);
+            const grid = document.getElementById('ingredientGrid');
+            grid.innerHTML = '';
+            allIng.forEach(([key, display]) => {
+                const chip = document.createElement('button');
+                chip.className = 'ing-chip' + (selectedIngredients.has(key) ? ' selected' : '');
+                chip.textContent = display;
+                chip.dataset.key = key;
+                chip.addEventListener('click', () => {
+                    if (selectedIngredients.has(key)) {
+                        selectedIngredients.delete(key);
+                        chip.classList.remove('selected');
+                    } else {
+                        selectedIngredients.add(key);
+                        chip.classList.add('selected');
+                    }
+                    localStorage.setItem('rayito-bar-ingredients', JSON.stringify([...selectedIngredients]));
+                    updateMiBarraCounter();
+                });
+                grid.appendChild(chip);
+            });
+            // Setup buscador de ingredientes
+            const ingSearch = document.getElementById('ingSearch');
+            if (ingSearch) {
+                ingSearch.oninput = () => filterIngChips(ingSearch.value);
+                // Re-aplicar filtro si ya tenía texto (re-render)
+                if (ingSearch.value) filterIngChips(ingSearch.value);
+            }
+            updateMiBarraCounter();
+            renderCartaHistoria();
+        }
+
+        function updateMiBarraCounter() {
+            const scored = allDrinks
+                .map(d => {
+                    const keys = getDrinkIngKeys(d);
+                    if (!keys.length) return null;
+                    const { canMake, missing } = matchScore(keys, selectedIngredients);
+                    return { canMake, missingCount: missing.length };
+                })
+                .filter(Boolean);
+
+            const full    = scored.filter(s => s.canMake).length;
+            const partial = scored.filter(s => !s.canMake && s.missingCount <= 2).length;
+            const counter = document.getElementById('mibarCounter');
+            const btn     = document.getElementById('btnGenCarta');
+            btn.disabled  = selectedIngredients.size === 0;
+            if (selectedIngredients.size === 0) {
+                counter.textContent = 'Selecciona ingredientes para generar tu carta';
+            } else {
+                const parts = [];
+                if (full > 0)    parts.push(`<strong style="color:var(--text-primary)">${full} cóctel${full !== 1 ? 'es' : ''} listo${full !== 1 ? 's' : ''}</strong>`);
+                if (partial > 0) parts.push(`${partial} casi listo${partial !== 1 ? 's' : ''}`);
+                counter.innerHTML = parts.length ? parts.join(' &middot; ') : 'Selecciona más ingredientes';
+            }
+            renderRealtimePanel();
+        }
+
+        /* ── Filtra los chips de ingredientes por búsqueda ── */
+        function filterIngChips(query) {
+            const q = query.toLowerCase().trim();
+            let visible = 0;
+            document.querySelectorAll('#ingredientGrid .ing-chip').forEach(chip => {
+                const match = !q || chip.textContent.toLowerCase().includes(q);
+                chip.classList.toggle('ing-hidden', !match);
+                if (match) visible++;
+            });
+            const label = document.getElementById('ingLabel');
+            if (label) {
+                label.textContent = q
+                    ? `Ingredientes (${visible} resultado${visible !== 1 ? 's' : ''})`
+                    : 'Ingredientes';
+            }
+        }
+
+        /* ── Panel en tiempo real: muestra cócteles con su avance ── */
+        function renderRealtimePanel() {
+            const container = document.getElementById('realtimeDrinks');
+            const rtCount   = document.getElementById('rtCount');
+            if (!container) return;
+
+            if (selectedIngredients.size === 0 || allDrinks.length === 0) {
+                container.innerHTML = '<div class="rt-empty">Selecciona ingredientes<br>para ver tu avance 🍸</div>';
+                if (rtCount) rtCount.textContent = '';
+                return;
+            }
+
+            const scored = allDrinks
+                .map(d => {
+                    const keys = getDrinkIngKeys(d);
+                    if (!keys.length) return null;
+                    const { canMake, missing } = matchScore(keys, selectedIngredients);
+                    return { drink: d, missingCount: missing.length, missingKeys: missing, canMake };
+                })
+                .filter(Boolean)
+                .sort((a, b) => a.missingCount - b.missingCount);
+
+            const ready   = scored.filter(s => s.missingCount === 0);
+            const falta1  = scored.filter(s => s.missingCount === 1);
+            const falta2  = scored.filter(s => s.missingCount === 2);
+            const notYet  = scored.filter(s => s.missingCount >= 3);
+
+            if (rtCount) {
+                rtCount.textContent = ready.length > 0 ? `${ready.length} listo${ready.length !== 1 ? 's' : ''}` : '';
+            }
+
+            function badge(n) {
+                if (n === 0) return '<span class="rt-badge rt-badge--ready">✓ Listo</span>';
+                if (n === 1) return '<span class="rt-badge rt-badge--1">Falta 1</span>';
+                if (n === 2) return '<span class="rt-badge rt-badge--2">Faltan 2</span>';
+                return `<span class="rt-badge rt-badge--many">Faltan ${n}</span>`;
+            }
+
+            function renderGroup(items, label) {
+                if (!items.length) return '';
+                const rows = items.map(({ drink, missingCount, missingKeys }) => {
+                    const name  = (drink['Cóctel'] || drink['Coctel'] || '').trim();
+                    const icon  = getCocktailIcon(name);
+                    const cls   = missingCount === 0 ? ' rt--ready' : '';
+                    const tip   = missingKeys.length
+                        ? ` data-tooltip="Te falta: ${missingKeys.map(k => capitalize(k)).join(', ')}"`
+                        : '';
+                    return `<div class="rt-drink-item${cls}"${tip}>
+                        <span class="rt-drink-icon">${icon}</span>
+                        <span class="rt-drink-name">${escapeHTML(name)}</span>
+                        ${badge(missingCount)}
+                    </div>`;
+                }).join('');
+                return `<div class="rt-section-label">${label}</div>${rows}`;
+            }
+
+            let html = '';
+            if (ready.length)  html += renderGroup(ready,  '✦ Listos para preparar');
+            if (falta1.length) html += renderGroup(falta1, '○ Te falta 1 ingrediente');
+            if (falta2.length) html += renderGroup(falta2, '○ Te faltan 2 ingredientes');
+            if (notYet.length) html += renderGroup(notYet, '· Necesitan más ingredientes');
+
+            container.innerHTML = html || '<div class="rt-empty">Selecciona más ingredientes</div>';
+        }
+
+        /* ═══════════════════════════════════════════════
+         *  HISTORIAL DE CARTAS
+         * ═══════════════════════════════════════════════ */
+        const MAX_HISTORIA = 8;
+        const HISTORIA_KEY = 'rayito-bar-carta-historia';
+
+        function getCartaHistoria() {
+            return JSON.parse(localStorage.getItem(HISTORIA_KEY) || '[]');
+        }
+
+        function saveCartaHistoria(ingredients, readyCount) {
+            const hist = getCartaHistoria();
+            hist.unshift({ ts: Date.now(), ingredients: [...ingredients], readyCount });
+            if (hist.length > MAX_HISTORIA) hist.pop();
+            localStorage.setItem(HISTORIA_KEY, JSON.stringify(hist));
+        }
+
+        function formatHistoriaDate(ts) {
+            return new Date(ts).toLocaleString('es-CL', {
+                day: 'numeric', month: 'short', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+        }
+
+        function renderCartaHistoria() {
+            const hist = getCartaHistoria();
+            const container = document.getElementById('cartaHistory');
+            const btn = document.getElementById('btnHistorial');
+            if (!container) return;
+            if (btn) btn.classList.toggle('visible', hist.length > 0);
+            if (hist.length === 0) {
+                container.innerHTML = '<div class="historial-empty">No hay cartas guardadas aún.</div>';
+                return;
+            }
+            container.innerHTML = hist.map((entry, i) => `
+                <div class="historia-item">
+                    <div class="historia-meta">
+                        <span class="historia-date">${formatHistoriaDate(entry.ts)}</span>
+                        <div class="historia-badges">
+                            <span class="historia-badge historia-badge--ready">🍸 ${entry.readyCount} listo${entry.readyCount !== 1 ? 's' : ''}</span>
+                            <span class="historia-badge historia-badge--ing">${entry.ingredients.length} ingrediente${entry.ingredients.length !== 1 ? 's' : ''}</span>
+                        </div>
+                    </div>
+                    <div class="historia-actions">
+                        <button class="btn-ver-historia" data-idx="${i}">Ver carta</button>
+                        <button class="btn-del-historia" data-idx="${i}" title="Eliminar">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* ═══════════════════════════════════════════════
+         *  NEON SHOW — Slideshow de presentación
+         * ═══════════════════════════════════════════════ */
+        let neonSlides = [];
+        let neonCurrentSlide = 0;
+
+        function renderNeonSlide(idx) {
+            const total = neonSlides.length;
+            if (idx < 0) idx = 0;
+            if (idx >= total) idx = total - 1;
+            neonCurrentSlide = idx;
+
+            const slide = neonSlides[idx];
+            const wrap  = document.getElementById('neonSlideWrap');
+
+            // Dots
+            const dotsEl = document.getElementById('neonDots');
+            if (dotsEl) {
+                dotsEl.innerHTML = neonSlides.map((_, i) =>
+                    `<div class="neon-dot${i === idx ? ' active' : ''}"></div>`
+                ).join('');
+            }
+
+            // Nav buttons
+            document.getElementById('neonPrev').disabled = (idx === 0);
+            document.getElementById('neonNext').disabled = (idx === total - 1);
+
+            const DIF_COLOR = { 'Básico': '#4ade80', 'Medio': '#fbbf24', 'Difícil': '#f87171' };
+
+            let html = '';
+            if (slide.type === 'title') {
+                html = `
+                    <div class="neon-slide neon-slide--title">
+                        <div class="neon-slide-inner">
+                            <div class="neon-supertitle">COCTELERÍA DE AUTOR</div>
+                            <div class="neon-maintitle">RAYITO'S<br>BAR</div>
+                            <div class="neon-tagline">${escapeHTML(slide.label || 'Tu Carta de Esta Noche')}</div>
+                            <div class="neon-title-count">⚡ ${slide.count} cóctel${slide.count !== 1 ? 'es' : ''} disponibles</div>
+                        </div>
+                    </div>`;
+            } else if (slide.type === 'drink') {
+                const d      = slide.drink;
+                const coctel = (d['Cóctel'] || d['Coctel'] || '').trim();
+                const dif    = normalizeDif(d.Dificultad || '');
+                const prebatch   = d['⏱️ Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '';
+                const servicio   = d['🧊 En el Momento (Servicio)'] || d.Servicio || '';
+                const inventario = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
+                const ingItems   = parseIngList(inventario);
+                const difColor   = DIF_COLOR[dif] || '#fbbf24';
+                const imgUrl     = getDrinkImage(coctel);
+
+                if (imgUrl) {
+                    // ── Layout con foto (como el PDF) ──
+                    const photoIngHtml = ingItems.length
+                        ? '<ul class="neon-photo-ing">' +
+                            ingItems.slice(0, 6).map(i => `<li>${escapeHTML(i)}</li>`).join('') +
+                            (ingItems.length > 6 ? `<li class="neon-ing-more">+${ingItems.length - 6} más...</li>` : '') +
+                          '</ul>'
+                        : '';
+                    html = `
+                        <div class="neon-slide neon-slide--photo">
+                            <div class="neon-photo-left">
+                                <img class="neon-photo-img"
+                                     src="${imgUrl}"
+                                     alt="${escapeHTML(coctel)}"
+                                     onerror="this.closest('.neon-slide--photo').classList.add('neon-photo--broken')">
+                            </div>
+                            <div class="neon-photo-right">
+                                <div class="neon-photo-category" style="color:${difColor}">● ${dif.toUpperCase()}</div>
+                                <div class="neon-photo-name">${escapeHTML(coctel)}</div>
+                                ${photoIngHtml}
+                                ${prebatch ? `<div class="neon-prep-line"><span class="neon-prep-label">⏱ Pre-batch</span>${escapeHTML(prebatch)}</div>` : ''}
+                                ${servicio ? `<div class="neon-prep-line"><span class="neon-prep-label">🧊 Servicio</span>${escapeHTML(servicio)}</div>` : ''}
+                            </div>
+                        </div>`;
+                } else {
+                    // ── Layout texto (sin foto disponible) ──
+                    const ingHtml = ingItems.length
+                        ? '<ul class="neon-ing-list">' +
+                            ingItems.slice(0, 7).map(i => `<li>${escapeHTML(i)}</li>`).join('') +
+                            (ingItems.length > 7 ? `<li class="neon-ing-more">+${ingItems.length - 7} más...</li>` : '') +
+                          '</ul>'
+                        : '';
+                    const icon    = getCocktailIcon(coctel);
+                    const slideBg = slide.bg || '#08080f';
+                    html = `
+                        <div class="neon-slide neon-slide--drink" style="background:${slideBg}">
+                            <div class="neon-slide-inner">
+                                <div class="neon-dif-tag" style="color:${difColor}">● ${dif.toUpperCase()}</div>
+                                <div class="neon-drink-icon">${icon}</div>
+                                <div class="neon-drink-name">${escapeHTML(coctel)}</div>
+                                ${ingHtml}
+                                ${prebatch ? `<div class="neon-prep-line"><span class="neon-prep-label">⏱ Pre-batch</span>${escapeHTML(prebatch)}</div>` : ''}
+                                ${servicio ? `<div class="neon-prep-line"><span class="neon-prep-label">🧊 Servicio</span>${escapeHTML(servicio)}</div>` : ''}
+                            </div>
+                        </div>`;
+                }
+            } else if (slide.type === 'pair') {
+                function drinkCard(d) {
+                    const n   = (d['Cóctel'] || d['Coctel'] || '').trim();
+                    const dif = normalizeDif(d.Dificultad || '');
+                    const srv = d['🧊 En el Momento (Servicio)'] || d.Servicio || '';
+                    const pb  = d['⏱️ Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '';
+                    const inv = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
+                    const items = parseIngList(inv).slice(0, 5);
+                    const dc  = DIF_COLOR[dif] || '#fbbf24';
+                    return `
+                        <div class="neon-pair-card">
+                            <div class="neon-pair-accent" style="background:${dc}"></div>
+                            <div class="neon-pair-body">
+                                <div class="neon-pair-name">${escapeHTML(n)}</div>
+                                <ul class="neon-pair-ing">
+                                    ${items.map(i => `<li>${escapeHTML(i)}</li>`).join('')}
+                                </ul>
+                                ${pb  ? `<div class="neon-prep-line" style="font-size:0.72rem"><span class="neon-prep-label">⏱ Pre-batch</span>${escapeHTML(pb)}</div>` : ''}
+                                ${srv ? `<div class="neon-prep-line" style="font-size:0.72rem"><span class="neon-prep-label">🧊 Servicio</span>${escapeHTML(srv)}</div>` : ''}
+                            </div>
+                        </div>`;
+                }
+                html = `
+                    <div class="neon-slide neon-slide--pair">
+                        <div class="neon-pair-header">SELECCIÓN DE ESTA NOCHE</div>
+                        <div class="neon-pair-grid">
+                            ${drinkCard(slide.drinkA)}
+                            ${drinkCard(slide.drinkB)}
+                        </div>
+                    </div>`;
+            } else if (slide.type === 'filosofia') {
+                html = `
+                    <div class="neon-slide neon-slide--filosofia">
+                        <div class="neon-slide-inner" style="align-items:center;text-align:center">
+                            <div class="neon-fil-title">NUESTRA FILOSOFÍA</div>
+                            <div class="neon-fil-line"></div>
+                            <div class="neon-fil-text">Cada trago cuenta una historia.<br>Seleccionamos lo mejor para que esta noche sea perfecta.</div>
+                        </div>
+                    </div>`;
+            } else if (slide.type === 'empty') {
+                html = `
+                    <div class="neon-slide neon-slide--salud">
+                        <div class="neon-slide-inner" style="align-items:center;text-align:center">
+                            <div class="neon-salud-sub">No hay cócteles disponibles</div>
+                            <div style="font-size:4rem;margin:16px 0">🍹</div>
+                            <div class="neon-salud-count">Agrega más ingredientes e intenta de nuevo</div>
+                        </div>
+                    </div>`;
+            } else if (slide.type === 'salud') {
+                html = `
+                    <div class="neon-slide neon-slide--salud">
+                        <div class="neon-slide-inner">
+                            <div class="neon-salud-sub">Y eso es todo por esta noche</div>
+                            <div class="neon-salud-main">¡SALUD!</div>
+                            <div class="neon-salud-count">${slide.count} cóctel${slide.count !== 1 ? 'es' : ''} esperan por ti 🍸</div>
+                        </div>
+                    </div>`;
+            }
+            wrap.innerHTML = html;
+        }
+
+        function neonGoTo(idx) {
+            renderNeonSlide(idx);
+        }
+
+        function buildNeonSlides(drinks, cartaLabel, shouldShow) {
+            neonSlides = [];
+            neonCurrentSlide = 0;
+
+            // Slide 0: portada
+            neonSlides.push({ type: 'title', count: drinks.length, label: cartaLabel });
+
+            // Slide 1: filosofía / bienvenida
+            neonSlides.push({ type: 'filosofia' });
+
+            if (drinks.length === 0) {
+                // Slide especial: no hay cócteles
+                neonSlides.push({ type: 'empty' });
+            } else {
+                // Slides de cócteles: en pares cuando son varios, solos si quedan impares o son pocos
+                const BASICO_BG  = 'radial-gradient(ellipse at 20% 50%, #001a12 0%, #08080f 65%)';
+                const MEDIO_BG   = 'radial-gradient(ellipse at 75% 40%, #1a1000 0%, #08080f 65%)';
+                const DIFICIL_BG = 'radial-gradient(ellipse at 50% 80%, #1a0008 0%, #08080f 65%)';
+                const DIF_BG = { 'Básico': BASICO_BG, 'Medio': MEDIO_BG, 'Difícil': DIFICIL_BG };
+
+                if (drinks.length === 1) {
+                    drinks.forEach(d => neonSlides.push({ type: 'drink', drink: d, bg: DIF_BG[normalizeDif(d.Dificultad)] || MEDIO_BG }));
+                } else {
+                    // Pares de cócteles en un mismo slide
+                    for (let i = 0; i < drinks.length; i += 2) {
+                        const a = drinks[i], b = drinks[i + 1];
+                        if (!b) {
+                            // Impar al final → slide solo
+                            neonSlides.push({ type: 'drink', drink: a, bg: DIF_BG[normalizeDif(a.Dificultad)] || MEDIO_BG });
+                        } else {
+                            neonSlides.push({ type: 'pair', drinkA: a, drinkB: b });
+                        }
+                    }
+                }
+            }
+
+            // Slide final: ¡Salud!
+            neonSlides.push({ type: 'salud', count: drinks.length });
+
+            renderNeonSlide(0);
+            document.getElementById('neonPublish').style.display = shouldShow ? '' : 'none';
+            document.getElementById('neonOverlay').classList.remove('hidden');
+        }
+
+        /* ── Genera la carta ── */
+        function buildCarta(ingSet, cartaLabel, showPublish) {
+            ingSet = ingSet || selectedIngredients;
+            const DOT_COLOR = { 'Básico': '#16a34a', 'Medio': '#C86400', 'Difícil': '#dc2626' };
+            const fullMatches = [];
+
+            allDrinks.forEach(d => {
+                const keys = getDrinkIngKeys(d);
+                if (!keys.length) return;
+                const { canMake } = matchScore(keys, ingSet);
+                if (canMake) fullMatches.push(d);
+            });
+
+            // Guardar referencia para publicar
+            lastCartaIngSet    = ingSet;
+            lastCartaReadyCount = fullMatches.length;
+
+            // showPublish: true = forzar visible, false = forzar oculto, undefined = auto (oculto si ya hay publicada)
+            const shouldShow = showPublish === true ? true
+                             : showPublish === false ? false
+                             : !getCartaPublicada();
+
+            // Guardar en historial solo cuando es generación fresca (no desde historial)
+            if (ingSet === selectedIngredients && fullMatches.length > 0) {
+                saveCartaHistoria(selectedIngredients, fullMatches.length);
+                renderCartaHistoria();
+            }
+
+            // ── Neon Show: modo presentación ──
+            if (selectedFormat === 'neon') {
+                buildNeonSlides(fullMatches, cartaLabel, shouldShow);
+                return;
+            }
+
+            // ── Paper mode ──
+            document.getElementById('btnPublicarCarta').style.display = shouldShow ? '' : 'none';
+
+            // Aplicar clase de formato al papel
+            const FORMAT_CFG = {
+                estandar: {
+                    ornament: '✦ ✦ ✦',
+                    divider:  '· · ·',
+                    footer:   '✦ Disfruta con responsabilidad ✦',
+                    tagline:  '— Tu Carta de Esta Noche —',
+                    icon: d  => getCocktailIcon((d['Cóctel'] || d['Coctel'] || '').trim()),
+                    heading: n => `✦ Disponibles esta noche — ${n} cóctel${n !== 1 ? 'es' : ''} ✦`,
+                },
+                retro: {
+                    ornament: '─── ◆ ───',
+                    divider:  '═  ═  ═',
+                    footer:   '~ Beba con moderación ~',
+                    tagline:  '— La Carta de Esta Noche —',
+                    icon: d  => getCocktailIcon((d['Cóctel'] || d['Coctel'] || '').trim()),
+                    heading: n => `◆ Disponibles esta noche — ${n} cóctel${n !== 1 ? 'es' : ''} ◆`,
+                },
+                gatitos: {
+                    ornament: '🐾 🐱 🐾',
+                    divider:  '🐾 · · · 🐾',
+                    footer:   '~ Nya~ Disfruta con responsabilidad ~',
+                    tagline:  '— Nyaaa, Tu Carta de Esta Noche ~~~ —',
+                    icon: d  => getCatIcon((d['Cóctel'] || d['Coctel'] || '').trim()),
+                    heading: n => `🐱 Listos para servir — ${n} cóctel${n !== 1 ? 'es' : ''} 🐱`,
+                },
+                vintage: {
+                    ornament: '♪ ♫ ♪',
+                    divider:  '♪ · · · ♪',
+                    footer:   '♫ Disfruta el ritmo de la noche ♫',
+                    tagline:  '— Esta Noche Suena Bien —',
+                    icon: d  => getMusicIcon((d['Cóctel'] || d['Coctel'] || '').trim()),
+                    heading: n => `♪ On the menu tonight — ${n} cóctel${n !== 1 ? 'es' : ''} ♪`,
+                },
+            };
+            const fmt = FORMAT_CFG[selectedFormat] || FORMAT_CFG.estandar;
+
+            const paper = document.querySelector('.carta-paper');
+            paper.className = 'carta-paper';
+            if (selectedFormat !== 'estandar') paper.classList.add('carta-paper--' + selectedFormat);
+
+            // Actualizar ornamentos del header
+            document.querySelectorAll('.carta-ornament').forEach(el => { el.textContent = fmt.ornament; });
+            document.querySelector('.carta-footer-text').textContent = fmt.footer;
+
+            const content = document.getElementById('cartaContent');
+            content.innerHTML = '';
+
+            // Actualizar tagline con label si viene del historial
+            const taglineEl = document.querySelector('.carta-tagline');
+            if (taglineEl) taglineEl.textContent = cartaLabel || fmt.tagline;
+
+            if (fullMatches.length === 0) {
+                const emptyColor = selectedFormat === 'retro' ? '#5a4a3a' : 'var(--text-muted)';
+                content.innerHTML = `<p style="text-align:center;color:${emptyColor};padding:32px 0">No hay cócteles disponibles con los ingredientes seleccionados. Agrega más ingredientes e intenta de nuevo.</p>`;
+                return;
+            }
+
+            function renderCartaItem(d) {
+                const coctel = (d['Cóctel'] || d['Coctel'] || '').trim();
+                const dif = normalizeDif(d.Dificultad || '');
+                const icon = fmt.icon(d);
+                const prebatch = d['⏱️ Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '';
+                const servicio = d['🧊 En el Momento (Servicio)'] || d.Servicio || '';
+                const dotColor = DOT_COLOR[dif] || '#C86400';
+                const div = document.createElement('div');
+                div.className = 'carta-item';
+                div.innerHTML = `
+                    <div class="carta-item-top">
+                        <span class="carta-item-icon">${icon}</span>
+                        <div class="carta-item-name">
+                            ${escapeHTML(coctel)}
+                            <span class="carta-dif-dot" style="background:${dotColor}" title="${dif}"></span>
+                        </div>
+                    </div>
+                    <div class="carta-item-info">
+                        ${prebatch ? `<em>⏱ Pre-batch</em>${escapeHTML(prebatch)}` : ''}
+                        ${servicio ? `<em>🧊 Servicio</em>${escapeHTML(servicio)}` : ''}
+                    </div>
+                `;
+                return div;
+            }
+
+            function addDivider(parent) {
+                const d = document.createElement('div');
+                d.className = 'carta-divider';
+                d.textContent = fmt.divider;
+                parent.appendChild(d);
+            }
+
+            const h = document.createElement('div');
+            h.className = 'carta-section-heading';
+            h.textContent = fmt.heading(fullMatches.length);
+            content.appendChild(h);
+            fullMatches.forEach((d, i) => {
+                content.appendChild(renderCartaItem(d));
+                if (i < fullMatches.length - 1) addDivider(content);
+            });
+        }
+
+        /* ── Navegación entre páginas ── */
+        function showPage(page) {
+            const pageHome = document.getElementById('pageHome');
+            const pageMiBar = document.getElementById('pageMiBar');
+            const filterBar = document.getElementById('filterBar');
+            const searchBox = document.querySelector('.search-box');
+            if (page === 'home') {
+                pageHome.classList.remove('hidden');
+                pageMiBar.classList.add('hidden');
+                filterBar.style.display = '';
+                searchBox.style.display = '';
+                document.getElementById('btnMiBar').classList.remove('active');
+            } else {
+                pageHome.classList.add('hidden');
+                pageMiBar.classList.remove('hidden');
+                filterBar.style.display = 'none';
+                searchBox.style.display = 'none';
+                document.getElementById('btnMiBar').classList.add('active');
+                if (allDrinks.length > 0) renderMiBarraPage();
+            }
+        }
+
+        document.getElementById('btnMiBar').addEventListener('click', () => showPage('mibar'));
+        document.getElementById('btnBack').addEventListener('click', () => showPage('home'));
+        document.getElementById('btnHome').addEventListener('click', () => showPage('home'));
+
+        document.getElementById('btnClearSel').addEventListener('click', () => {
+            selectedIngredients.clear();
+            localStorage.removeItem('rayito-bar-ingredients');
+            document.querySelectorAll('.ing-chip.selected').forEach(c => c.classList.remove('selected'));
+            updateMiBarraCounter();
+        });
+
+        document.getElementById('btnGenCarta').addEventListener('click', () => {
+            buildCarta();
+        });
+
+        document.getElementById('cartaClose').addEventListener('click', () => {
+            document.getElementById('cartaOverlay').classList.add('hidden');
+        });
+
+        document.getElementById('cartaOverlay').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.add('hidden');
+        });
+
+        /* ── Historial: ver + eliminar ── */
+        document.getElementById('cartaHistory').addEventListener('click', function(e) {
+            const verBtn = e.target.closest('.btn-ver-historia');
+            const delBtn = e.target.closest('.btn-del-historia');
+            if (verBtn) {
+                const idx   = parseInt(verBtn.dataset.idx, 10);
+                const hist  = getCartaHistoria();
+                const entry = hist[idx];
+                if (!entry) return;
+                const label = '— Carta del ' + formatHistoriaDate(entry.ts) + ' —';
+                buildCarta(new Set(entry.ingredients), label, true);
+                document.getElementById('historialOverlay').classList.add('hidden');
+            }
+            if (delBtn) {
+                const idx  = parseInt(delBtn.dataset.idx, 10);
+                const hist = getCartaHistoria();
+                hist.splice(idx, 1);
+                localStorage.setItem(HISTORIA_KEY, JSON.stringify(hist));
+                renderCartaHistoria();
+            }
+        });
+
+        /* ── Popup historial: abrir / cerrar ── */
+        document.getElementById('btnHistorial').addEventListener('click', () => {
+            renderCartaHistoria();
+            document.getElementById('historialOverlay').classList.remove('hidden');
+        });
+        document.getElementById('historialClose').addEventListener('click', () => {
+            document.getElementById('historialOverlay').classList.add('hidden');
+        });
+        document.getElementById('historialOverlay').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.add('hidden');
+        });
+
+        /* ── Carta publicada ── */
+        const PUB_KEY = 'rayito-bar-carta-publicada';
+        let lastCartaIngSet    = null;
+        let lastCartaReadyCount = 0;
+
+        function getCartaPublicada() {
+            return JSON.parse(localStorage.getItem(PUB_KEY) || 'null');
+        }
+
+        function renderCartaPublicada() {
+            const pub    = getCartaPublicada();
+            const wrap   = document.getElementById('cartaPubWrap');
+            if (!wrap) return;
+            if (!pub) { wrap.style.display = 'none'; return; }
+            wrap.style.display = '';
+            document.getElementById('pubReadyCount').innerHTML =
+                `🍸 <strong>${pub.readyCount} cóctel${pub.readyCount !== 1 ? 'es' : ''} listo${pub.readyCount !== 1 ? 's' : ''}</strong>`;
+            document.getElementById('pubDate').textContent = formatHistoriaDate(pub.ts);
+        }
+
+        document.getElementById('btnPublicarCarta').addEventListener('click', () => {
+            if (!lastCartaIngSet) return;
+            localStorage.setItem(PUB_KEY, JSON.stringify({
+                ts: Date.now(),
+                ingredients: [...lastCartaIngSet],
+                readyCount: lastCartaReadyCount
+            }));
+            document.getElementById('cartaOverlay').classList.add('hidden');
+            document.getElementById('historialOverlay').classList.add('hidden');
+            showPage('home');
+            renderCartaPublicada();
+        });
+
+        document.getElementById('btnVerPub').addEventListener('click', () => {
+            const pub = getCartaPublicada();
+            if (!pub) return;
+            buildCarta(new Set(pub.ingredients), '— Carta Publicada —', false);
+        });
+
+        document.getElementById('btnRetirarPub').addEventListener('click', () => {
+            localStorage.removeItem(PUB_KEY);
+            renderCartaPublicada();
+        });
+
+        /* ── Neon Slideshow: controles ── */
+        document.getElementById('neonClose').addEventListener('click', () => {
+            document.getElementById('neonOverlay').classList.add('hidden');
+        });
+        document.getElementById('neonPrev').addEventListener('click', () => {
+            neonGoTo(neonCurrentSlide - 1);
+        });
+        document.getElementById('neonNext').addEventListener('click', () => {
+            neonGoTo(neonCurrentSlide + 1);
+        });
+        document.getElementById('neonPublish').addEventListener('click', () => {
+            if (!lastCartaIngSet) return;
+            localStorage.setItem(PUB_KEY, JSON.stringify({
+                ts: Date.now(),
+                ingredients: [...lastCartaIngSet],
+                readyCount: lastCartaReadyCount
+            }));
+            document.getElementById('neonOverlay').classList.add('hidden');
+            document.getElementById('historialOverlay').classList.add('hidden');
+            showPage('home');
+            renderCartaPublicada();
+        });
+
+        /* ── Neon Slideshow: swipe táctil para tablet ── */
+        (function () {
+            let tx = 0, ty = 0;
+            const overlay = document.getElementById('neonOverlay');
+            overlay.addEventListener('touchstart', e => {
+                tx = e.changedTouches[0].screenX;
+                ty = e.changedTouches[0].screenY;
+            }, { passive: true });
+            overlay.addEventListener('touchend', e => {
+                const dx = e.changedTouches[0].screenX - tx;
+                const dy = e.changedTouches[0].screenY - ty;
+                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+                    if (dx < 0) neonGoTo(neonCurrentSlide + 1);
+                    else        neonGoTo(neonCurrentSlide - 1);
+                }
+            }, { passive: true });
+        })();
+
+        /* ── Tooltip global ── */
+        (function () {
+            const tip = document.getElementById('appTooltip');
+            let hideTimer;
+            document.addEventListener('mouseover', function (e) {
+                const el = e.target && e.target.closest ? e.target.closest('[data-tooltip]') : null;
+                clearTimeout(hideTimer);
+                if (!el) { tip.classList.remove('visible'); return; }
+                const text = el.dataset.tooltip;
+                if (!text) return;
+                tip.textContent = text;
+                const r = el.getBoundingClientRect();
+                tip.style.left = Math.round(r.left + r.width / 2) + 'px';
+                tip.style.top  = Math.round(r.top - 8) + 'px';
+                tip.style.transform = 'translate(-50%, -100%)';
+                tip.classList.add('visible');
+            });
+            document.addEventListener('mouseleave', function (e) {
+                if (!e.target || !e.target.closest) return;
+                if (!e.target.closest('[data-tooltip]')) return;
+                hideTimer = setTimeout(() => tip.classList.remove('visible'), 80);
+            }, true);
+            document.addEventListener('scroll', function () {
+                tip.classList.remove('visible');
+            }, true);
+        })();
+
+        /* Inicializar carta publicada al cargar */
+        renderCartaPublicada();
     </script>
 </body>
 </html>

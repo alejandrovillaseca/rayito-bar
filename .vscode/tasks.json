@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Firebase: Serve local",
+            "type": "shell",
+            "command": "firebase serve --only hosting --project rayito-bar",
+            "group": "build",
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "."
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "i  hosting",
+                    "endsPattern": "Local server: http://localhost:\\d+"
+                }
+            }
+        },
+        {
+            "label": "Firebase: Deploy",
+            "type": "shell",
+            "command": "firebase deploy --only hosting --project rayito-bar",
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
