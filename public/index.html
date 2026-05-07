@@ -1680,12 +1680,25 @@
             [/ron |rum |ron$|rum$/i,        '/img/drinks/ron.jpg'],
         ];
 
+        /* Convierte "Piña Colada" → "pina-colada" para buscar la imagen */
+        function slugifyDrink(str) {
+            return str
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9\s]/g, '')
+                .trim()
+                .replace(/\s+/g, '-');
+        }
+
         function getDrinkImage(name) {
             if (!name) return null;
+            // 1º busca regla explícita en DRINK_IMAGE_RULES
             for (const [re, url] of DRINK_IMAGE_RULES) {
                 if (re.test(name)) return url;
             }
-            return null;
+            // 2º fallback automático: /img/drinks/{slug}.jpg
+            // Si el archivo no existe, el onerror del <img> lo maneja
+            return `/img/drinks/${slugifyDrink(name)}.jpg`;
         }
 
         /* ── Normalize difficulty (handles "🟢 Básico" or plain "Básico") ── */
