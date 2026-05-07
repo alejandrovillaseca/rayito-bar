@@ -1690,15 +1690,17 @@
                 .replace(/\s+/g, '-');
         }
 
+        // Extensiones a probar en orden (el onerror las cicla)
+        const IMG_EXTS = ['.jpg', '.png', '.webp', '.jpeg'];
+
         function getDrinkImage(name) {
             if (!name) return null;
             // 1º busca regla explícita en DRINK_IMAGE_RULES
             for (const [re, url] of DRINK_IMAGE_RULES) {
                 if (re.test(name)) return url;
             }
-            // 2º fallback automático: /img/drinks/{slug}.jpg
-            // Si el archivo no existe, el onerror del <img> lo maneja
-            return `/img/drinks/${slugifyDrink(name)}.jpg`;
+            // 2º fallback automático: /img/drinks/{slug}.jpg (primera extensión a probar)
+            return `/img/drinks/${slugifyDrink(name)}${IMG_EXTS[0]}`;
         }
 
         /* ── Normalize difficulty (handles "🟢 Básico" or plain "Básico") ── */
@@ -2210,7 +2212,7 @@
                                 <img class="neon-photo-img"
                                      src="${imgUrl}"
                                      alt="${escapeHTML(coctel)}"
-                                     onerror="this.closest('.neon-slide--photo').classList.add('neon-photo--broken')">
+                                     onerror="(function(el){var exts=${JSON.stringify(IMG_EXTS)};var base=el.src.replace(/\\.[^.]+$/,'');var cur=el.src.match(/\\.[^.]+$/)?.[0]||'';var next=exts[exts.indexOf(cur)+1];if(next){el.src=base+next}else{el.closest('.neon-slide--photo').classList.add('neon-photo--broken')}})(this)">
                             </div>
                             <div class="neon-photo-right">
                                 <div class="neon-photo-category" style="color:${difColor}">● ${dif.toUpperCase()}</div>
