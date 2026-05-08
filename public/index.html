@@ -6,7 +6,7 @@
     <title>Rayito's Bar — Guía de Cócteles</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23181A20'/%3E%3Cg fill='%23C86400'%3E%3Cpolygon points='16,12 48,12 36,34 36,52 28,52 28,34' fill='none' stroke='%23C86400' stroke-width='3.5' stroke-linejoin='round'/%3E%3Crect x='22' y='52' width='20' height='3.5' rx='1.75'/%3E%3Ccircle cx='44' cy='30' r='5' fill='%23C86400'/%3E%3Cline x1='44' y1='25' x2='44' y2='18' stroke='%23C86400' stroke-width='2.5' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Barlow+Condensed:wght@700;900&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="design-system.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
@@ -846,12 +846,208 @@
             cursor: pointer;
             transition: all 0.15s;
             font-family: inherit;
+            width: 100%;
         }
         .formato-card:hover { border-color: rgba(200,100,0,0.45); }
         .formato-card.selected { border-color: var(--accent-orange); background: rgba(200,100,0,0.08); }
         .formato-icon { font-size: 1.7rem; line-height: 1; }
         .formato-name { font-size: var(--font-size-sm); font-weight: 700; color: var(--text-primary); }
         .formato-desc { font-size: 0.62rem; color: var(--text-muted); text-align: center; line-height: 1.3; }
+        .formato-card-wrap { position: relative; }
+        .formato-gear-btn {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            line-height: 1;
+            padding: 0;
+        }
+        .formato-gear-btn:hover, .formato-gear-btn.active {
+            background: rgba(200,100,0,0.18);
+            border-color: var(--accent-orange);
+            color: var(--accent-orange);
+        }
+
+        /* ── Chalk Menu overlay ── */
+        .chalk-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            background: #141410;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .chalk-overlay.hidden { display: none; }
+        .chalk-close-btn {
+            position: fixed;
+            top: 14px;
+            right: 18px;
+            z-index: 510;
+            background: rgba(232,184,75,0.12);
+            border: 1px solid rgba(232,184,75,0.3);
+            color: #e8b84b;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+        }
+        .chalk-close-btn:hover { background: rgba(232,184,75,0.22); }
+        .chalk-publish-btn {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            z-index: 510;
+            background: var(--accent-orange);
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.04em;
+            box-shadow: 0 4px 16px rgba(200,100,0,0.4);
+        }
+        .chalk-publish-btn:hover { background: #e07200; }
+        .chalk-inner {
+            width: 100%;
+            max-width: 900px;
+            padding: 60px 32px 48px;
+            box-sizing: border-box;
+        }
+        /* Header */
+        .chalk-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        .chalk-header-sub {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            color: rgba(232,184,75,0.6);
+            letter-spacing: 0.15em;
+            margin-bottom: 4px;
+        }
+        .chalk-header-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(2.8rem, 8vw, 5rem);
+            font-weight: 900;
+            color: #e8b84b;
+            letter-spacing: 0.1em;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+        .chalk-header-script {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1.4rem, 3.5vw, 2rem);
+            color: rgba(232,184,75,0.75);
+            margin-top: 6px;
+        }
+        .chalk-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0 28px;
+            color: rgba(232,184,75,0.35);
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+        }
+        .chalk-divider::before,
+        .chalk-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(232,184,75,0.2);
+        }
+        /* Drink grid */
+        .chalk-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px 28px;
+        }
+        @media (max-width: 700px) {
+            .chalk-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 440px) {
+            .chalk-grid { grid-template-columns: 1fr; }
+        }
+        /* Drink card */
+        .chalk-card {
+            border-bottom: 1px solid rgba(232,184,75,0.15);
+            padding-bottom: 16px;
+        }
+        .chalk-card-name {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1.15rem, 2.5vw, 1.35rem);
+            font-weight: 700;
+            color: #e8b84b;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+        .chalk-card-dif {
+            display: inline-block;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 1px 6px;
+            border-radius: 3px;
+            margin-bottom: 8px;
+        }
+        .chalk-card-ings {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .chalk-card-ings li {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.65);
+            padding-left: 10px;
+            position: relative;
+            line-height: 1.4;
+        }
+        .chalk-card-ings li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: rgba(232,184,75,0.4);
+            font-size: 0.6rem;
+            top: 2px;
+        }
+        .chalk-card-photo {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            opacity: 0.85;
+        }
+        /* Footer */
+        .chalk-footer {
+            text-align: center;
+            margin-top: 36px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.1rem;
+            color: rgba(232,184,75,0.4);
+            letter-spacing: 0.1em;
+        }
 
         /* ── Carta overlay ── */
         .carta-overlay {
@@ -1253,6 +1449,79 @@
         }
         .neon-publish-btn:hover { opacity: 0.82; }
 
+        /* Ruedita de config */
+        .neon-config-btn {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: rgba(255,255,255,0.65);
+            font-size: 1.1rem;
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s;
+        }
+        .neon-config-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        .neon-config-panel {
+            position: fixed;
+            inset: 0;
+            z-index: 600;
+            background: rgba(0,0,0,0.72);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .neon-config-panel.hidden { display: none; }
+        .neon-config-inner {
+            background: #111118;
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 16px;
+            padding: 28px 28px 24px;
+            min-width: 300px;
+            max-width: 420px;
+            width: 90vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        .neon-config-close {
+            position: absolute;
+            top: 12px; right: 14px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 1rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+            font-family: inherit;
+        }
+        .neon-config-close:hover { color: #fff; }
+        .neon-config-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 14px;
+        }
+        .neon-config-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .neon-config-row input[type=checkbox] { width: 16px; height: 16px; accent-color: #00e5cc; cursor: pointer; flex-shrink: 0; }
+        .neon-config-row label {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.75);
+            cursor: pointer;
+            line-height: 1.3;
+        }
+
         /* Dots progress indicator */
         .neon-dots {
             position: absolute;
@@ -1306,18 +1575,32 @@
         .neon-slide--pair {
             background: #08080f;
             align-items: stretch;
-            justify-content: stretch;
-            padding: 110px 56px 70px;
-            position: relative;
+            justify-content: center;
+            padding: 48px 56px;
+            gap: 20px;
         }
         .neon-pair-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            gap: 20px;
             width: 100%;
             max-width: 860px;
             margin: 0 auto;
-            align-self: center;
+        }
+        .neon-pair-grid--full {
+            max-width: 100%;
+        }
+        .neon-pair-grid--solo {
+            grid-template-columns: 1fr;
+            max-width: 480px;
+        }
+        .neon-pair-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 16px;
+            display: flex;
+            overflow: hidden;
+            flex-direction: row;
         }
         .neon-pair-card {
             background: rgba(255,255,255,0.03);
@@ -1325,6 +1608,22 @@
             border-radius: 12px;
             display: flex;
             overflow: hidden;
+            flex-direction: row;
+        }
+        .neon-pair-card--photo {
+            flex-direction: column;
+        }
+        .neon-pair-img-wrap {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .neon-pair-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
         .neon-pair-accent {
             width: 4px;
@@ -1332,8 +1631,11 @@
             border-radius: 0;
         }
         .neon-pair-body {
-            padding: 20px 18px;
+            padding: 24px 22px;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
         .neon-pair-icon { font-size: 1.6rem; margin-bottom: 6px; }
         .neon-pair-name {
@@ -1352,9 +1654,9 @@
             margin: 0 0 10px;
         }
         .neon-pair-ing li {
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.65);
-            padding: 4px 0;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+            padding: 6px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             display: flex;
             align-items: center;
@@ -1374,15 +1676,19 @@
             padding: 0;
             align-items: stretch;
             text-align: left;
+            justify-content: unset;
         }
         .neon-photo-left {
             position: relative;
             overflow: hidden;
+            height: 100%;
+            background: #08080f;
         }
         .neon-photo-img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            object-position: center center;
             display: block;
         }
         /* Si la imagen falla, ocultar el panel izquierdo y expandir el derecho */
@@ -1434,18 +1740,74 @@
             flex-shrink: 0;
         }
 
-        /* ── Pair slide: header como el PDF ── */
+        /* ── Pair/Quad slide: header ── */
         .neon-pair-header {
             font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
-            font-size: clamp(1.4rem, 4vw, 2.4rem);
-            font-weight: 900;
-            color: #00e5cc;
+            font-size: clamp(0.75rem, 1.5vw, 1rem);
+            font-weight: 700;
+            color: rgba(0,229,204,0.5);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            position: absolute;
-            top: 44px;
-            left: 56px;
+            letter-spacing: 0.25em;
+            flex-shrink: 0;
         }
+
+        /* ── Per-slide picker ── */
+        .per-slide-picker { display: flex; align-items: center; gap: 10px; }
+        .per-slide-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+        .per-slide-btn {
+            width: 36px; height: 36px; border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem; font-weight: 700; cursor: pointer;
+            transition: all 0.15s;
+        }
+        .per-slide-btn:hover { border-color: rgba(200,100,0,0.45); }
+        .per-slide-btn.selected { border-color: var(--accent-orange); background: rgba(200,100,0,0.12); color: #fff; }
+
+        /* ── Slide: quad (4 cócteles, 2x2) ── */
+        .neon-slide--quad {
+            display: flex; flex-direction: column;
+            padding: 40px 56px 44px;
+            justify-content: center;
+            align-items: stretch;
+            gap: 16px;
+        }
+        .neon-quad-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .neon-quad-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+        }
+        .neon-quad-accent { width: 4px; flex-shrink: 0; border-radius: 0; }
+        .neon-quad-inner {
+            padding: 22px 22px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            min-width: 0;
+        }
+        .neon-quad-name {
+            font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 900; color: #ff2b6e; text-transform: uppercase;
+            letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 12px;
+        }
+        .neon-quad-ing { list-style: none; padding: 0; margin: 0; }
+        .neon-quad-ing li {
+            font-size: clamp(0.78rem, 1.4vw, 0.92rem); color: rgba(255,255,255,0.65);
+            padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .neon-quad-ing li::before { content: '▶'; color: #00e5cc; font-size: 0.45em; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -1542,10 +1904,18 @@
             <div class="formato-sec" id="formatoSec">
                 <div class="formato-sec-title">⚡ Modo Presentación</div>
                 <div class="formato-grid" id="formatoGrid">
-                    <button class="formato-card selected" data-formato="neon">
-                        <span class="formato-icon">⚡</span>
-                        <span class="formato-name">Neon Show</span>
-                        <span class="formato-desc">Slideshow tablet</span>
+                    <div class="formato-card-wrap">
+                        <button class="formato-card selected" data-formato="neon">
+                            <span class="formato-icon">⚡</span>
+                            <span class="formato-name">Neon Show</span>
+                            <span class="formato-desc">Slideshow tablet</span>
+                        </button>
+                        <button class="formato-gear-btn" id="neonConfigBtn" title="Configuración">⚙</button>
+                    </div>
+                    <button class="formato-card" data-formato="chalk">
+                        <span class="formato-icon">🍹</span>
+                        <span class="formato-name">Chalk Menu</span>
+                        <span class="formato-desc">Póster estilo pizarrón</span>
                     </button>
                 </div>
             </div>
@@ -1553,6 +1923,27 @@
         <div class="mibar-cta-bar">
             <div class="mibar-counter" id="mibarCounter">Selecciona ingredientes para generar tu carta</div>
             <button class="btn-gen-carta" id="btnGenCarta" disabled>Ver mi carta</button>
+        </div>
+    </div>
+
+    <!-- Config Modal -->
+    <div id="neonConfigPanel" class="neon-config-panel hidden">
+        <div class="neon-config-inner">
+            <button class="neon-config-close" id="neonConfigClose">✕</button>
+            <div class="neon-config-title">Configuración del slideshow</div>
+            <div class="neon-config-row" style="margin-bottom:18px">
+                <span class="per-slide-label">Por slide</span>
+                <div id="perSlidePicker" style="display:flex;gap:8px">
+                    <button class="per-slide-btn" data-n="1">1</button>
+                    <button class="per-slide-btn selected" data-n="2">2</button>
+                    <button class="per-slide-btn" data-n="4">4</button>
+                </div>
+            </div>
+            <div class="neon-config-row">
+                <input type="checkbox" id="chkSoloConFoto" checked>
+                <label for="chkSoloConFoto">Slide individual para cócteles con foto</label>
+            </div>
+            <button id="neonConfigSave" style="margin-top:20px;width:100%;padding:10px;background:var(--accent-orange);border:none;border-radius:8px;color:#fff;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:inherit;">Guardar</button>
         </div>
     </div>
 
@@ -1582,6 +1973,13 @@
         <button class="neon-nav neon-nav--next" id="neonNext">›</button>
         <div class="neon-dots" id="neonDots"></div>
         <button class="neon-publish-btn" id="neonPublish" style="display:none">📌 Publicar carta</button>
+    </div>
+
+    <!-- Chalk Menu overlay -->
+    <div id="chalkOverlay" class="chalk-overlay hidden">
+        <button class="chalk-close-btn" id="chalkClose">✕ Cerrar</button>
+        <button class="chalk-publish-btn" id="chalkPublish" style="display:none">📌 Publicar carta</button>
+        <div class="chalk-inner" id="chalkInner"></div>
     </div>
 
     <!-- Historial popup -->
@@ -1675,6 +2073,7 @@
             [/paloma/i,                     '/img/drinks/paloma.jpg'],
             [/cuba libre/i,                 '/img/drinks/cuba-libre.jpg'],
             [/sex on the beach/i,           '/img/drinks/sex-on-the-beach.jpg'],
+            [/cantaritos/i,                  '/img/drinks/cantaritos.png'],
             [/tequila|mezcal/i,             '/img/drinks/tequila.jpg'],
             [/gin|gimlet/i,                 '/img/drinks/gin.jpg'],
             [/ron |rum |ron$|rum$/i,        '/img/drinks/ron.jpg'],
@@ -1693,14 +2092,28 @@
         // Extensiones a probar en orden (el onerror las cicla)
         const IMG_EXTS = ['.jpg', '.png', '.webp', '.jpeg'];
 
+        // Función global para ciclar extensiones sin comillas en el atributo HTML
+        function imgNextExt(el, fallbackAction) {
+            const exts = IMG_EXTS;
+            const base = el.src.replace(/\.[^.]+$/, '');
+            const cur  = (el.src.match(/\.[^.]+$/) || [''])[0];
+            const next = exts[exts.indexOf(cur) + 1];
+            if (next) {
+                el.src = base + next;
+            } else if (fallbackAction === 'hide-wrap') {
+                el.parentElement.style.display = 'none';
+            } else {
+                el.closest('.neon-slide--photo').classList.add('neon-photo--broken');
+            }
+        }
+
         function getDrinkImage(name) {
             if (!name) return null;
             // 1º busca regla explícita en DRINK_IMAGE_RULES
             for (const [re, url] of DRINK_IMAGE_RULES) {
                 if (re.test(name)) return url;
             }
-            // 2º fallback automático: /img/drinks/{slug}.jpg (primera extensión a probar)
-            return `/img/drinks/${slugifyDrink(name)}${IMG_EXTS[0]}`;
+            return null;
         }
 
         /* ── Normalize difficulty (handles "🟢 Básico" or plain "Básico") ── */
@@ -1896,6 +2309,8 @@
         );
 
         let selectedFormat = 'neon';
+        let neonPerSlide   = 2;
+        let neonSoloConFoto = true;
 
         function capitalize(str) {
             if (!str) return '';
@@ -2176,6 +2591,61 @@
 
             const DIF_COLOR = { 'Básico': '#4ade80', 'Medio': '#fbbf24', 'Difícil': '#f87171' };
 
+            // Tarjeta reutilizable para slides pair y quad
+            function drinkCard(d, maxIng) {
+                maxIng = maxIng || 5;
+                const n   = (d['Cóctel'] || d['Coctel'] || '').trim();
+                const dif = normalizeDif(d.Dificultad || '');
+                const srv = d['🧊 En el Momento (Servicio)'] || d.Servicio || '';
+                const pb  = d['⏱️ Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '';
+                const inv = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
+                const items = parseIngList(inv).slice(0, maxIng);
+                const dc  = DIF_COLOR[dif] || '#fbbf24';
+                const imgUrl = getDrinkImage(n);
+                const imgHtml = imgUrl ? `
+                    <div class="neon-pair-img-wrap">
+                        <img class="neon-pair-img" src="${imgUrl}" alt="${escapeHTML(n)}"
+                             onerror="imgNextExt(this,'hide-wrap')">
+                    </div>` : '';
+                return `
+                    <div class="neon-pair-card${imgUrl ? ' neon-pair-card--photo' : ''}">
+                        ${imgHtml}
+                        <div style="display:flex;flex:1;overflow:hidden">
+                            <div class="neon-pair-accent" style="background:${dc}"></div>
+                            <div class="neon-pair-body">
+                                <div class="neon-pair-name">${escapeHTML(n)}</div>
+                                <ul class="neon-pair-ing">
+                                    ${items.map(i => `<li>${escapeHTML(i)}</li>`).join('')}
+                                </ul>
+                                ${pb  ? `<div class="neon-prep-line" style="font-size:0.72rem"><span class="neon-prep-label">⏱ Pre-batch</span>${escapeHTML(pb)}</div>` : ''}
+                                ${srv ? `<div class="neon-prep-line" style="font-size:0.72rem"><span class="neon-prep-label">🧊 Servicio</span>${escapeHTML(srv)}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+                function quadCard(d) {
+                const n   = (d['Cóctel'] || d['Coctel'] || '').trim();
+                const dif = normalizeDif(d.Dificultad || '');
+                const inv = d['\uD83D\uDED2 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
+                const srv = d['\uD83E\uDDCA En el Momento (Servicio)'] || d.Servicio || '';
+                const pb  = d['\u23F1\uFE0F Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '';
+                const items = parseIngList(inv).slice(0, 4);
+                const dc  = DIF_COLOR[dif] || '#fbbf24';
+                return `
+                    <div class="neon-quad-card">
+                        <div class="neon-quad-accent" style="background:${dc}"></div>
+                        <div class="neon-quad-inner">
+                            <div class="neon-quad-name">${escapeHTML(n)}</div>
+                            <ul class="neon-quad-ing">
+                                ${items.map(i => `<li>${escapeHTML(i)}</li>`).join('')}
+                            </ul>
+                            ${pb  ? `<div class="neon-prep-line" style="margin-top:8px;font-size:0.72rem"><span class="neon-prep-label">\u23F1 Pre-batch</span>${escapeHTML(pb)}</div>` : ''}
+                            ${srv ? `<div class="neon-prep-line" style="font-size:0.72rem"><span class="neon-prep-label">\uD83E\uDDCA Servicio</span>${escapeHTML(srv)}</div>` : ''}
+                        </div>
+                    </div>`;
+            }
+
             let html = '';
             if (slide.type === 'title') {
                 html = `
@@ -2212,7 +2682,7 @@
                                 <img class="neon-photo-img"
                                      src="${imgUrl}"
                                      alt="${escapeHTML(coctel)}"
-                                     onerror="(function(el){var exts=${JSON.stringify(IMG_EXTS)};var base=el.src.replace(/\\.[^.]+$/,'');var cur=el.src.match(/\\.[^.]+$/)?.[0]||'';var next=exts[exts.indexOf(cur)+1];if(next){el.src=base+next}else{el.closest('.neon-slide--photo').classList.add('neon-photo--broken')}})(this)">
+                                     onerror="imgNextExt(this)">
                             </div>
                             <div class="neon-photo-right">
                                 <div class="neon-photo-category" style="color:${difColor}">● ${dif.toUpperCase()}</div>
@@ -2245,33 +2715,21 @@
                         </div>`;
                 }
             } else if (slide.type === 'pair') {
-                function drinkCard(d) {
-                    const n   = (d['Cóctel'] || d['Coctel'] || '').trim();
-                    const dif = normalizeDif(d.Dificultad || '');
-                    const srv = d['🧊 En el Momento (Servicio)'] || d.Servicio || '';
-                    const pb  = d['⏱️ Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '';
-                    const inv = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
-                    const items = parseIngList(inv).slice(0, 5);
-                    const dc  = DIF_COLOR[dif] || '#fbbf24';
-                    return `
-                        <div class="neon-pair-card">
-                            <div class="neon-pair-accent" style="background:${dc}"></div>
-                            <div class="neon-pair-body">
-                                <div class="neon-pair-name">${escapeHTML(n)}</div>
-                                <ul class="neon-pair-ing">
-                                    ${items.map(i => `<li>${escapeHTML(i)}</li>`).join('')}
-                                </ul>
-                                ${pb  ? `<div class="neon-prep-line" style="font-size:0.72rem"><span class="neon-prep-label">⏱ Pre-batch</span>${escapeHTML(pb)}</div>` : ''}
-                                ${srv ? `<div class="neon-prep-line" style="font-size:0.72rem"><span class="neon-prep-label">🧊 Servicio</span>${escapeHTML(srv)}</div>` : ''}
-                            </div>
-                        </div>`;
-                }
+                const isSolo = !slide.drinkB;
                 html = `
                     <div class="neon-slide neon-slide--pair">
                         <div class="neon-pair-header">SELECCIÓN DE ESTA NOCHE</div>
-                        <div class="neon-pair-grid">
-                            ${drinkCard(slide.drinkA)}
-                            ${drinkCard(slide.drinkB)}
+                        <div class="neon-pair-grid${slide.full ? ' neon-pair-grid--full' : ''}${isSolo ? ' neon-pair-grid--solo' : ''}">
+                            ${drinkCard(slide.drinkA, 8)}
+                            ${isSolo ? '' : drinkCard(slide.drinkB, 8)}
+                        </div>
+                    </div>`;
+            } else if (slide.type === 'quad') {
+                html = `
+                    <div class="neon-slide neon-slide--quad">
+                        <div class="neon-pair-header">SELECCIÓN DE ESTA NOCHE</div>
+                        <div class="neon-quad-grid">
+                            ${slide.drinks.map(d => quadCard(d)).join('')}
                         </div>
                     </div>`;
             } else if (slide.type === 'filosofia') {
@@ -2312,6 +2770,7 @@
         function buildNeonSlides(drinks, cartaLabel, shouldShow) {
             neonSlides = [];
             neonCurrentSlide = 0;
+            lastNeonDrinks = drinks;  // guardar para rebuild desde config
 
             // Slide 0: portada
             neonSlides.push({ type: 'title', count: drinks.length, label: cartaLabel });
@@ -2329,18 +2788,45 @@
                 const DIFICIL_BG = 'radial-gradient(ellipse at 50% 80%, #1a0008 0%, #08080f 65%)';
                 const DIF_BG = { 'Básico': BASICO_BG, 'Medio': MEDIO_BG, 'Difícil': DIFICIL_BG };
 
-                if (drinks.length === 1) {
-                    drinks.forEach(d => neonSlides.push({ type: 'drink', drink: d, bg: DIF_BG[normalizeDif(d.Dificultad)] || MEDIO_BG }));
-                } else {
-                    // Pares de cócteles en un mismo slide
-                    for (let i = 0; i < drinks.length; i += 2) {
-                        const a = drinks[i], b = drinks[i + 1];
-                        if (!b) {
-                            // Impar al final → slide solo
-                            neonSlides.push({ type: 'drink', drink: a, bg: DIF_BG[normalizeDif(a.Dificultad)] || MEDIO_BG });
-                        } else {
-                            neonSlides.push({ type: 'pair', drinkA: a, drinkB: b });
+                // Separar los que tienen imagen de los que no
+                const withImg    = drinks.filter(d => !!getDrinkImage((d['Cóctel'] || d['Coctel'] || '').trim()));
+                const withoutImg = drinks.filter(d => !getDrinkImage((d['Cóctel'] || d['Coctel'] || '').trim()));
+
+                function pushGroup(group, forceOne) {
+                    const perSlide = forceOne ? 1 : neonPerSlide;
+                    if (perSlide === 1 || group.length === 1) {
+                        group.forEach(d => neonSlides.push({ type: 'drink', drink: d, bg: DIF_BG[normalizeDif(d.Dificultad)] || MEDIO_BG }));
+                    } else if (perSlide === 4) {
+                        for (let i = 0; i < group.length; i += 4) {
+                            const chunk = group.slice(i, i + 4);
+                            if (chunk.length === 1) {
+                                neonSlides.push({ type: 'pair', drinkA: chunk[0], drinkB: null, full: true });
+                            } else if (chunk.length === 2) {
+                                neonSlides.push({ type: 'pair', drinkA: chunk[0], drinkB: chunk[1], full: true });
+                            } else {
+                                neonSlides.push({ type: 'quad', drinks: chunk });
+                            }
                         }
+                    } else {
+                        for (let i = 0; i < group.length; i += 2) {
+                            const a = group[i], b = group[i + 1];
+                            if (!b) {
+                                neonSlides.push({ type: 'pair', drinkA: a, drinkB: null, full: true });
+                            } else {
+                                neonSlides.push({ type: 'pair', drinkA: a, drinkB: b });
+                            }
+                        }
+                    }
+                }
+
+                if (withImg.length || withoutImg.length) {
+                    if (neonSoloConFoto) {
+                        // foto → individual; sin foto → agrupado según perSlide
+                        if (withImg.length)    pushGroup(withImg, true);
+                        if (withoutImg.length) pushGroup(withoutImg, false);
+                    } else {
+                        // sin separación: mezclar todo en un solo grupo
+                        pushGroup([...withImg, ...withoutImg], false);
                     }
                 }
             }
@@ -2370,10 +2856,8 @@
             lastCartaIngSet    = ingSet;
             lastCartaReadyCount = fullMatches.length;
 
-            // showPublish: true = forzar visible, false = forzar oculto, undefined = auto (oculto si ya hay publicada)
-            const shouldShow = showPublish === true ? true
-                             : showPublish === false ? false
-                             : !getCartaPublicada();
+            // showPublish: true/undefined = visible, false = forzar oculto (ej: ver carta publicada desde home)
+            const shouldShow = showPublish !== false;
 
             // Guardar en historial solo cuando es generación fresca (no desde historial)
             if (ingSet === selectedIngredients && fullMatches.length > 0) {
@@ -2384,6 +2868,12 @@
             // ── Neon Show: modo presentación ──
             if (selectedFormat === 'neon') {
                 buildNeonSlides(fullMatches, cartaLabel, shouldShow);
+                return;
+            }
+
+            // ── Chalk Menu ──
+            if (selectedFormat === 'chalk') {
+                buildChalkMenu(ingSet, shouldShow);
                 return;
             }
 
@@ -2490,6 +2980,54 @@
             });
         }
 
+        /* ── Chalk Menu ── */
+        function buildChalkMenu(ingSet, shouldShow) {
+            ingSet = ingSet || selectedIngredients;
+            const drinks = [];
+            allDrinks.forEach(d => {
+                const keys = getDrinkIngKeys(d);
+                if (!keys.length) return;
+                const { canMake } = matchScore(keys, ingSet);
+                if (canMake) drinks.push(d);
+            });
+
+            const DIF_COLOR_CHALK = { 'Básico': '#4ade80', 'Medio': '#fb923c', 'Difícil': '#f87171' };
+            const DIF_BG_CHALK    = { 'Básico': 'rgba(74,222,128,0.15)', 'Medio': 'rgba(251,146,60,0.15)', 'Difícil': 'rgba(248,113,113,0.15)' };
+
+            const cards = drinks.map(d => {
+                const name   = (d['Cóctel'] || d['Coctel'] || '').trim();
+                const dif    = normalizeDif(d.Dificultad || '');
+                const inv    = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
+                const items  = parseIngList(inv).slice(0, 5);
+                const dc     = DIF_COLOR_CHALK[dif] || '#fb923c';
+                const dbg    = DIF_BG_CHALK[dif]    || 'rgba(251,146,60,0.15)';
+                const imgUrl = getDrinkImage(name);
+                const photoHtml = imgUrl ? `<img class="chalk-card-photo" src="${imgUrl}" alt="${escapeHTML(name)}" loading="lazy">` : '';
+                const ingsHtml  = items.map(it => `<li>${escapeHTML(stripQty(it))}</li>`).join('');
+                return `<div class="chalk-card">
+                    ${photoHtml}
+                    <div class="chalk-card-name">${escapeHTML(name)}</div>
+                    ${dif ? `<span class="chalk-card-dif" style="color:${dc};background:${dbg}">${escapeHTML(dif)}</span>` : ''}
+                    <ul class="chalk-card-ings">${ingsHtml}</ul>
+                </div>`;
+            }).join('');
+
+            const html = `
+                <div class="chalk-header">
+                    <div class="chalk-header-sub">✦ Signature ✦</div>
+                    <div class="chalk-header-title">Cocktails</div>
+                    <div class="chalk-header-script">— Esta noche en Rayito's Bar —</div>
+                </div>
+                <div class="chalk-divider">◆ &nbsp; ${drinks.length} cóctel${drinks.length !== 1 ? 'es' : ''} disponible${drinks.length !== 1 ? 's' : ''} &nbsp; ◆</div>
+                <div class="chalk-grid">${cards}</div>
+                <div class="chalk-footer">✦ &nbsp; Disfruta con responsabilidad &nbsp; ✦</div>
+            `;
+            document.getElementById('chalkInner').innerHTML = html;
+            document.getElementById('chalkOverlay').classList.remove('hidden');
+            document.getElementById('chalkOverlay').scrollTop = 0;
+            document.getElementById('chalkPublish').style.display = shouldShow !== false ? '' : 'none';
+        }
+
         /* ── Navegación entre páginas ── */
         function showPage(page) {
             const pageHome = document.getElementById('pageHome');
@@ -2525,6 +3063,44 @@
 
         document.getElementById('btnGenCarta').addEventListener('click', () => {
             buildCarta();
+        });
+
+        /* ── Selector de formato ── */
+        document.getElementById('formatoGrid').addEventListener('click', e => {
+            const card = e.target.closest('.formato-card[data-formato]');
+            if (!card) return;
+            document.querySelectorAll('.formato-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedFormat = card.dataset.formato;
+        });
+
+        /* ── Chalk Menu: cerrar ── */
+        document.getElementById('chalkClose').addEventListener('click', () => {
+            document.getElementById('chalkOverlay').classList.add('hidden');
+        });
+        document.getElementById('chalkPublish').addEventListener('click', () => {
+            if (!lastCartaIngSet) return;
+            localStorage.setItem(PUB_KEY, JSON.stringify({
+                ts: Date.now(),
+                ingredients: [...lastCartaIngSet],
+                readyCount: lastCartaReadyCount
+            }));
+            document.getElementById('chalkOverlay').classList.add('hidden');
+            document.getElementById('historialOverlay').classList.add('hidden');
+            showPage('home');
+            renderCartaPublicada();
+        });
+
+        document.getElementById('perSlidePicker').addEventListener('click', e => {
+            const btn = e.target.closest('.per-slide-btn');
+            if (!btn) return;
+            document.querySelectorAll('.per-slide-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            neonPerSlide = parseInt(btn.dataset.n);
+            if (!document.getElementById('neonOverlay').classList.contains('hidden') && lastNeonDrinks.length) {
+                const shouldShow = document.getElementById('neonPublish').style.display !== 'none';
+                buildNeonSlides(lastNeonDrinks, null, shouldShow);
+            }
         });
 
         document.getElementById('cartaClose').addEventListener('click', () => {
@@ -2573,6 +3149,7 @@
         const PUB_KEY = 'rayito-bar-carta-publicada';
         let lastCartaIngSet    = null;
         let lastCartaReadyCount = 0;
+        let lastNeonDrinks     = [];
 
         function getCartaPublicada() {
             return JSON.parse(localStorage.getItem(PUB_KEY) || 'null');
@@ -2617,6 +3194,31 @@
         document.getElementById('neonClose').addEventListener('click', () => {
             document.getElementById('neonOverlay').classList.add('hidden');
         });
+        document.getElementById('neonConfigBtn').addEventListener('click', e => {
+            e.stopPropagation();
+            document.getElementById('neonConfigPanel').classList.remove('hidden');
+            document.getElementById('neonConfigBtn').classList.add('active');
+        });
+        function closeConfigPanel() {
+            document.getElementById('neonConfigPanel').classList.add('hidden');
+            document.getElementById('neonConfigBtn').classList.remove('active');
+        }
+        document.getElementById('neonConfigClose').addEventListener('click', closeConfigPanel);
+        document.getElementById('neonConfigPanel').addEventListener('click', e => {
+            if (!e.target.closest('.neon-config-inner')) closeConfigPanel();
+        });
+        document.getElementById('neonConfigSave').addEventListener('click', () => {
+            neonSoloConFoto = document.getElementById('chkSoloConFoto').checked;
+            const selBtn = document.querySelector('.per-slide-btn.selected');
+            if (selBtn) neonPerSlide = parseInt(selBtn.dataset.n);
+            closeConfigPanel();
+            if (!document.getElementById('neonOverlay').classList.contains('hidden') && lastNeonDrinks.length) {
+                const shouldShow = document.getElementById('neonPublish').style.display !== 'none';
+                buildNeonSlides(lastNeonDrinks, null, shouldShow);
+            }
+        });
+        document.getElementById('chkSoloConFoto').addEventListener('change', function() {});
+
         document.getElementById('neonPrev').addEventListener('click', () => {
             neonGoTo(neonCurrentSlide - 1);
         });
