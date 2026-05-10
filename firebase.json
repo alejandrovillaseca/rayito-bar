@@ -10,9 +10,15 @@
       {
         "source": "/img/drinks/**",
         "headers": [
-          { "key": "Cache-Control", "value": "public, max-age=604800" }
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=604800"
+          }
         ]
       }
     ]
+  },
+  "database": {
+    "rules": "database.rules.json"
   }
 }

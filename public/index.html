@@ -3182,11 +3182,7 @@
         });
         document.getElementById('chalkPublish').addEventListener('click', () => {
             if (!lastCartaIngSet) return;
-            localStorage.setItem(PUB_KEY, JSON.stringify({
-                ts: Date.now(),
-                ingredients: [...lastCartaIngSet],
-                readyCount: lastCartaReadyCount
-            }));
+            publicarEnDB(lastCartaIngSet, lastCartaReadyCount);
             document.getElementById('chalkOverlay').classList.add('hidden');
             document.getElementById('historialOverlay').classList.add('hidden');
             showPage('home');
@@ -3270,11 +3266,7 @@
 
         document.getElementById('btnPublicarCarta').addEventListener('click', () => {
             if (!lastCartaIngSet) return;
-            localStorage.setItem(PUB_KEY, JSON.stringify({
-                ts: Date.now(),
-                ingredients: [...lastCartaIngSet],
-                readyCount: lastCartaReadyCount
-            }));
+            publicarEnDB(lastCartaIngSet, lastCartaReadyCount);
             document.getElementById('cartaOverlay').classList.add('hidden');
             document.getElementById('historialOverlay').classList.add('hidden');
             showPage('home');
@@ -3329,11 +3321,7 @@
         });
         document.getElementById('neonPublish').addEventListener('click', () => {
             if (!lastCartaIngSet) return;
-            localStorage.setItem(PUB_KEY, JSON.stringify({
-                ts: Date.now(),
-                ingredients: [...lastCartaIngSet],
-                readyCount: lastCartaReadyCount
-            }));
+            publicarEnDB(lastCartaIngSet, lastCartaReadyCount);
             document.getElementById('neonOverlay').classList.add('hidden');
             document.getElementById('historialOverlay').classList.add('hidden');
             showPage('home');
@@ -3390,17 +3378,36 @@
 
         /* ── Leer ?carta= al cargar ── */
         (function () {
-            const params = new URLSearchParams(window.location.search);
+            const params  = new URLSearchParams(window.location.search);
             const encoded = params.get('carta');
             if (!encoded) return;
+
+            if (encoded === 'live') {
+                // URL fija: leer ingredientes desde RTDB
+                async function openLive() {
+                    try {
+                        const res  = await fetch('https://rayito-bar-default-rtdb.firebaseio.com/carta.json');
+                        const data = await res.json();
+                        if (data && Array.isArray(data.ingredients)) {
+                            buildChalkMenu(new Set(data.ingredients), false);
+                        }
+                    } catch(e) { console.warn('RTDB read failed', e); }
+                }
+                if (window._allDrinksReady && window._allDrinksReady.length) {
+                    openLive();
+                } else {
+                    document.addEventListener('drinksCargados', openLive, { once: true });
+                }
+                return;
+            }
+
+            // Compatibilidad: base64 legacy
             let ingredients;
             try {
-                // URL-safe base64: revertir - → + y _ → /
                 const b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
                 ingredients = JSON.parse(atob(b64));
             } catch(e) { return; }
             if (!Array.isArray(ingredients)) return;
-            // Forzar chalk menu: estático, legible en móvil, no depende de selectedFormat
             function open() { buildChalkMenu(new Set(ingredients), false); }
             if (window._allDrinksReady && window._allDrinksReady.length) {
                 open();
@@ -3409,17 +3416,33 @@
             }
         })();
 
-        /* ── QR Modal ── */
-        function generarCartaUrl(ingredients) {
-            // URL-safe base64: reemplazar + → - y / → _ y quitar padding =
-            const encoded = btoa(JSON.stringify(ingredients))
-                .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-            return window.location.origin + window.location.pathname + '?carta=' + encoded;
+        /* ── RTDB: URL fija de carta ── */
+        const RTDB_URL = 'https://rayito-bar-default-rtdb.firebaseio.com/carta.json';
+
+        function generarCartaUrl() {
+            return window.location.origin + window.location.pathname + '?carta=live';
         }
+
+        async function publicarEnDB(ingSet, readyCount) {
+            localStorage.setItem(PUB_KEY, JSON.stringify({
+                ts: Date.now(),
+                ingredients: [...ingSet],
+                readyCount: readyCount
+            }));
+            try {
+                await fetch(RTDB_URL, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ingredients: [...ingSet], ts: Date.now() })
+                });
+            } catch(e) { console.warn('RTDB write failed', e); }
+        }
+
+        /* ── QR Modal ── */
         function abrirQrModal() {
             const pub = getCartaPublicada();
             if (!pub) return;
-            const url = generarCartaUrl(pub.ingredients);
+            const url = generarCartaUrl();
             document.getElementById('qrUrl').textContent = url;
             document.getElementById('qrModal').classList.remove('hidden');
             // Dibujar QR + logo en canvas
