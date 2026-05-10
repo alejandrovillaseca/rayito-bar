@@ -976,6 +976,38 @@
             align-items: center;
         }
         .chalk-overlay.hidden { display: none; }
+        .chalk-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            gap: 20px;
+        }
+        .chalk-loading-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            font-weight: 900;
+            color: #e8b84b;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.25;
+        }
+        .chalk-loading-dots {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: rgba(232,184,75,0.55);
+            letter-spacing: 0.3em;
+        }
+        .chalk-loading-dots span {
+            animation: chalk-dot-blink 1.2s infinite both;
+        }
+        .chalk-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .chalk-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes chalk-dot-blink {
+            0%, 80%, 100% { opacity: 0.2; }
+            40%            { opacity: 1; }
+        }
         .chalk-close-btn {
             position: fixed;
             top: 14px;
@@ -3154,7 +3186,13 @@
 
         document.getElementById('btnMiBar').addEventListener('click', () => showPage('mibar'));
         document.getElementById('btnBack').addEventListener('click', () => showPage('home'));
-        document.getElementById('btnHome').addEventListener('click', () => showPage('home'));
+        document.getElementById('btnHome').addEventListener('click', () => {
+            if (window.location.search) {
+                window.location.href = window.location.origin + window.location.pathname;
+            } else {
+                showPage('home');
+            }
+        });
 
         document.getElementById('btnClearSel').addEventListener('click', () => {
             selectedIngredients.clear();
@@ -3274,9 +3312,7 @@
         });
 
         document.getElementById('btnVerPub').addEventListener('click', () => {
-            const pub = getCartaPublicada();
-            if (!pub) return;
-            buildCarta(new Set(pub.ingredients), '— Carta Publicada —', false);
+            window.open(generarCartaUrl(), '_blank');
         });
 
         document.getElementById('btnRetirarPub').addEventListener('click', () => {
@@ -3383,21 +3419,28 @@
             if (!encoded) return;
 
             if (encoded === 'live') {
-                // URL fija: leer ingredientes desde RTDB
-                async function openLive() {
-                    try {
-                        const res  = await fetch('https://rayito-bar-default-rtdb.firebaseio.com/carta.json');
-                        const data = await res.json();
-                        if (data && Array.isArray(data.ingredients)) {
-                            buildChalkMenu(new Set(data.ingredients), false);
-                        }
-                    } catch(e) { console.warn('RTDB read failed', e); }
-                }
-                if (window._allDrinksReady && window._allDrinksReady.length) {
-                    openLive();
-                } else {
-                    document.addEventListener('drinksCargados', openLive, { once: true });
-                }
+                // Mostrar overlay con spinner INMEDIATAMENTE
+                const chalkOverlay = document.getElementById('chalkOverlay');
+                const chalkInner   = document.getElementById('chalkInner');
+                chalkInner.innerHTML = '<div class="chalk-loading"><div class="chalk-loading-title">Rayito\'s Bar</div><div class="chalk-loading-dots"><span>·</span><span>·</span><span>·</span></div></div>';
+                chalkOverlay.classList.remove('hidden');
+
+                // Lanzar RTDB fetch y espera de drinks en paralelo
+                const rtdbPromise = fetch('https://rayito-bar-default-rtdb.firebaseio.com/carta.json')
+                    .then(r => r.json())
+                    .catch(() => null);
+
+                const drinksPromise = window._allDrinksReady && window._allDrinksReady.length
+                    ? Promise.resolve()
+                    : new Promise(resolve => document.addEventListener('drinksCargados', resolve, { once: true }));
+
+                Promise.all([rtdbPromise, drinksPromise]).then(([data]) => {
+                    if (data && Array.isArray(data.ingredients)) {
+                        buildChalkMenu(new Set(data.ingredients), false);
+                    } else {
+                        chalkInner.innerHTML = '<div class="chalk-loading"><span>No hay carta publicada</span></div>';
+                    }
+                });
                 return;
             }
 
