@@ -643,6 +643,91 @@
         }
         .carta-pub-sub strong { color: #4ade80; }
         .carta-pub-actions { display: flex; gap: var(--space-2); flex-shrink: 0; }
+        .btn-qr-pub {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(232,184,75,0.4);
+            background: rgba(232,184,75,0.08);
+            color: #e8b84b;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+        }
+        .btn-qr-pub:hover { background: rgba(232,184,75,0.18); }
+        /* QR Modal */
+        .qr-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 700;
+            background: rgba(0,0,0,0.78);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-modal.hidden { display: none; }
+        .qr-modal-inner {
+            background: #111118;
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 18px;
+            padding: 28px 28px 24px;
+            min-width: 280px;
+            max-width: 340px;
+            width: 90vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            position: relative;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .qr-modal-close {
+            position: absolute;
+            top: 12px; right: 14px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .qr-modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+        }
+        .qr-modal-img-wrap {
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px;
+            display: inline-block;
+        }
+        .qr-modal-img { display: block; width: 200px; height: 200px; }
+        .qr-modal-hint {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .qr-modal-url {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            word-break: break-all;
+            max-width: 100%;
+            opacity: 0.6;
+        }
+        .qr-modal-copy {
+            padding: 8px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-orange);
+            background: rgba(200,100,0,0.1);
+            color: var(--accent-orange);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .qr-modal-copy:hover { background: rgba(200,100,0,0.2); }
         .btn-ver-pub {
             padding: 8px 18px;
             border-radius: var(--radius-pill);
@@ -1844,6 +1929,7 @@
                 <div class="carta-pub-sub"><strong id="pubReadyCount"></strong> · <span id="pubDate"></span></div>
             </div>
             <div class="carta-pub-actions">
+                <button class="btn-qr-pub" id="btnQrPub" title="Ver QR">&#x25A6; QR</button>
                 <button class="btn-ver-pub" id="btnVerPub">Ver carta</button>
                 <button class="btn-retirar-pub" id="btnRetirarPub">Retirar</button>
             </div>
@@ -1973,6 +2059,20 @@
         <button class="neon-nav neon-nav--next" id="neonNext">›</button>
         <div class="neon-dots" id="neonDots"></div>
         <button class="neon-publish-btn" id="neonPublish" style="display:none">📌 Publicar carta</button>
+    </div>
+
+    <!-- QR Modal -->
+    <div id="qrModal" class="qr-modal hidden">
+        <div class="qr-modal-inner">
+            <button class="qr-modal-close" id="qrModalClose">✕</button>
+            <div class="qr-modal-title">QR de la carta</div>
+            <div class="qr-modal-img-wrap">
+                <canvas id="qrCanvas" class="qr-modal-img" width="200" height="200"></canvas>
+            </div>
+            <div class="qr-modal-hint">Escanea para ver la carta en cualquier dispositivo</div>
+            <div class="qr-modal-url" id="qrUrl"></div>
+            <button class="qr-modal-copy" id="qrCopyBtn">Copiar enlace</button>
+        </div>
     </div>
 
     <!-- Chalk Menu overlay -->
@@ -2264,6 +2364,8 @@
                     allDrinks = results.data.filter(d =>
                         (d['Cóctel'] || d['Coctel'] || '').trim()
                     );
+                    window._allDrinksReady = allDrinks;
+                    document.dispatchEvent(new CustomEvent('drinksCargados'));
                     renderDrinks();
                     if (!document.getElementById('pageMiBar').classList.contains('hidden')) {
                         renderMiBarraPage();
@@ -3003,7 +3105,7 @@
                 const dbg    = DIF_BG_CHALK[dif]    || 'rgba(251,146,60,0.15)';
                 const imgUrl = getDrinkImage(name);
                 const photoHtml = imgUrl ? `<img class="chalk-card-photo" src="${imgUrl}" alt="${escapeHTML(name)}" loading="lazy">` : '';
-                const ingsHtml  = items.map(it => `<li>${escapeHTML(stripQty(it))}</li>`).join('');
+                const ingsHtml  = items.map(it => `<li>${escapeHTML(it.trim())}</li>`).join('');
                 return `<div class="chalk-card">
                     ${photoHtml}
                     <div class="chalk-card-name">${escapeHTML(name)}</div>
@@ -3285,6 +3387,113 @@
 
         /* Inicializar carta publicada al cargar */
         renderCartaPublicada();
+
+        /* ── Leer ?carta= al cargar ── */
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            const encoded = params.get('carta');
+            if (!encoded) return;
+            let ingredients;
+            try {
+                // URL-safe base64: revertir - → + y _ → /
+                const b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+                ingredients = JSON.parse(atob(b64));
+            } catch(e) { return; }
+            if (!Array.isArray(ingredients)) return;
+            // Forzar chalk menu: estático, legible en móvil, no depende de selectedFormat
+            function open() { buildChalkMenu(new Set(ingredients), false); }
+            if (window._allDrinksReady && window._allDrinksReady.length) {
+                open();
+            } else {
+                document.addEventListener('drinksCargados', open, { once: true });
+            }
+        })();
+
+        /* ── QR Modal ── */
+        function generarCartaUrl(ingredients) {
+            // URL-safe base64: reemplazar + → - y / → _ y quitar padding =
+            const encoded = btoa(JSON.stringify(ingredients))
+                .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+            return window.location.origin + window.location.pathname + '?carta=' + encoded;
+        }
+        function abrirQrModal() {
+            const pub = getCartaPublicada();
+            if (!pub) return;
+            const url = generarCartaUrl(pub.ingredients);
+            document.getElementById('qrUrl').textContent = url;
+            document.getElementById('qrModal').classList.remove('hidden');
+            // Dibujar QR + logo en canvas
+            const canvas = document.getElementById('qrCanvas');
+            const ctx = canvas.getContext('2d');
+            const size = 200;
+            const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&ecc=H&data=' + encodeURIComponent(url);
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function () {
+                ctx.clearRect(0, 0, size, size);
+                ctx.drawImage(img, 0, 0, size, size);
+                // Logo: círculo blanco con silueta de gatito
+                const cx = size / 2, cy = size / 2, r = 24;
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.fillStyle = '#fff';
+                ctx.shadowColor = 'rgba(0,0,0,0.22)';
+                ctx.shadowBlur = 7;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                // Silueta gatito (cabeza + orejas puntiagudas)
+                ctx.fillStyle = '#1a1a2e';
+                ctx.beginPath();
+                // Orejas izquierda
+                ctx.moveTo(cx - 13, cy - 6);
+                ctx.lineTo(cx - 16, cy - 17);
+                ctx.lineTo(cx - 6, cy - 11);
+                // Orejas derecha
+                ctx.moveTo(cx + 13, cy - 6);
+                ctx.lineTo(cx + 16, cy - 17);
+                ctx.lineTo(cx + 6, cy - 11);
+                // Cabeza redonda
+                ctx.arc(cx, cy - 2, 12, 0, Math.PI * 2);
+                ctx.fill();
+                // Ojos (huecos blancos)
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.ellipse(cx - 4.5, cy - 3, 2.2, 2.8, -0.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(cx + 4.5, cy - 3, 2.2, 2.8, 0.2, 0, Math.PI * 2);
+                ctx.fill();
+                // Bigotes
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 0.8;
+                ctx.beginPath();
+                ctx.moveTo(cx - 13, cy + 2); ctx.lineTo(cx - 6, cy + 1);
+                ctx.moveTo(cx - 13, cy + 5); ctx.lineTo(cx - 6, cy + 3);
+                ctx.moveTo(cx + 13, cy + 2); ctx.lineTo(cx + 6, cy + 1);
+                ctx.moveTo(cx + 13, cy + 5); ctx.lineTo(cx + 6, cy + 3);
+                ctx.stroke();
+                ctx.restore();
+            };
+            img.src = qrUrl;
+        }
+        document.getElementById('btnQrPub').addEventListener('click', abrirQrModal);
+        document.getElementById('qrModalClose').addEventListener('click', () => {
+            document.getElementById('qrModal').classList.add('hidden');
+        });
+        document.getElementById('qrModal').addEventListener('click', e => {
+            if (!e.target.closest('.qr-modal-inner')) {
+                document.getElementById('qrModal').classList.add('hidden');
+            }
+        });
+        document.getElementById('qrCopyBtn').addEventListener('click', () => {
+            const url = document.getElementById('qrUrl').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = document.getElementById('qrCopyBtn');
+                btn.textContent = '✓ Copiado';
+                setTimeout(() => { btn.textContent = 'Copiar enlace'; }, 2000);
+            });
+        });
     </script>
 </body>
 </html>
