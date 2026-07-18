@@ -2298,6 +2298,7 @@
             // Support both old column names and new ones (con emoji en el header)
             const inventario = drink['🛒 Check de Inventario (Por persona)']
                             || drink['Ingredientes (por persona)']
+                            || drink['Ingredientes']
                             || '';
             const prebatch   = drink['⏱️ Pre-Batch (Horas antes del evento)']
                             || drink['Pre-Batch (Horas antes)']
@@ -2339,7 +2340,7 @@
                 if (!q) return matchDif;
                 const haystack = [
                     d['Cóctel'] || d['Coctel'] || '',
-                    d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '',
+                    d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || d['Ingredientes'] || '',
                     d['⏱️ Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '',
                     d['🧊 En el Momento (Servicio)'] || d.Servicio || '',
                 ].join(' ').toLowerCase();
@@ -2478,7 +2479,7 @@
             const map = new Map(); // normalizedKey → displayName
             drinks.forEach(d => {
                 const raw = d['🛒 Check de Inventario (Por persona)']
-                         || d['Ingredientes (por persona)'] || '';
+                         || d['Ingredientes (por persona)'] || d['Ingredientes'] || '';
                 parseIngList(raw).forEach(item => {
                     const key = normalizeIngKey(item);
                     if (!key || key.length < 2) return;
@@ -2492,7 +2493,7 @@
 
         function getDrinkIngKeys(drink) {
             const raw = drink['🛒 Check de Inventario (Por persona)']
-                     || drink['Ingredientes (por persona)'] || '';
+                     || drink['Ingredientes (por persona)'] || drink['Ingredientes'] || '';
             return parseIngList(raw).map(normalizeIngKey).filter(k => k && k.length >= 2);
         }
 
@@ -2732,7 +2733,7 @@
                 const dif = normalizeDif(d.Dificultad || '');
                 const srv = d['🧊 En el Momento (Servicio)'] || d.Servicio || '';
                 const pb  = d['⏱️ Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '';
-                const inv = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
+                const inv = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || d['Ingredientes'] || '';
                 const items = parseIngList(inv).slice(0, maxIng);
                 const dc  = DIF_COLOR[dif] || '#fbbf24';
                 const imgUrl = getDrinkImage(n);
@@ -2761,7 +2762,7 @@
                 function quadCard(d) {
                 const n   = (d['Cóctel'] || d['Coctel'] || '').trim();
                 const dif = normalizeDif(d.Dificultad || '');
-                const inv = d['\uD83D\uDED2 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
+                const inv = d['\uD83D\uDED2 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || d['Ingredientes'] || '';
                 const srv = d['\uD83E\uDDCA En el Momento (Servicio)'] || d.Servicio || '';
                 const pb  = d['\u23F1\uFE0F Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '';
                 const items = parseIngList(inv).slice(0, 4);
@@ -2797,7 +2798,7 @@
                 const dif    = normalizeDif(d.Dificultad || '');
                 const prebatch   = d['⏱️ Pre-Batch (Horas antes del evento)'] || d['Pre-Batch (Horas antes)'] || '';
                 const servicio   = d['🧊 En el Momento (Servicio)'] || d.Servicio || '';
-                const inventario = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
+                const inventario = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || d['Ingredientes'] || '';
                 const ingItems   = parseIngList(inventario);
                 const difColor   = DIF_COLOR[dif] || '#fbbf24';
                 const imgUrl     = getDrinkImage(coctel);
@@ -3131,7 +3132,7 @@
             const cards = drinks.map(d => {
                 const name   = (d['Cóctel'] || d['Coctel'] || '').trim();
                 const dif    = normalizeDif(d.Dificultad || '');
-                const inv    = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || '';
+                const inv    = d['🛒 Check de Inventario (Por persona)'] || d['Ingredientes (por persona)'] || d['Ingredientes'] || '';
                 const items  = parseIngList(inv).slice(0, 5);
                 const dc     = DIF_COLOR_CHALK[dif] || '#fb923c';
                 const dbg    = DIF_BG_CHALK[dif]    || 'rgba(251,146,60,0.15)';
