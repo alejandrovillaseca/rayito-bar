@@ -2248,6 +2248,9 @@
             return null;
         }
 
+        // Mascota de respaldo cuando el cóctel no tiene foto propia
+        const FALLBACK_IMAGE = '/img/drinks/rayito_bar.jpg';
+
         /* ── Normalize difficulty (handles "🟢 Básico" or plain "Básico") ── */
         function normalizeDif(raw) {
             if (!raw) return 'Medio';
@@ -3136,8 +3139,8 @@
                 const items  = parseIngList(inv).slice(0, 5);
                 const dc     = DIF_COLOR_CHALK[dif] || '#fb923c';
                 const dbg    = DIF_BG_CHALK[dif]    || 'rgba(251,146,60,0.15)';
-                const imgUrl = getDrinkImage(name);
-                const photoHtml = imgUrl ? `<img class="chalk-card-photo" src="${imgUrl}" alt="${escapeHTML(name)}" loading="lazy">` : '';
+                const imgUrl = getDrinkImage(name) || FALLBACK_IMAGE;
+                const photoHtml = `<img class="chalk-card-photo" src="${imgUrl}" alt="${escapeHTML(name)}" loading="lazy">`;
                 const ingsHtml  = items.map(it => `<li>${escapeHTML(it.trim())}</li>`).join('');
                 return `<div class="chalk-card">
                     ${photoHtml}
