@@ -2455,16 +2455,33 @@
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
 
-        /* Quita cantidad inicial: "50ml Tequila" → "Tequila" */
+        /* Quita cantidad inicial y aclaraciones entre paréntesis:
+           "50ml Tequila" → "Tequila", "Goma (proporción 3-2-1)" → "Goma" */
         function stripQty(str) {
             return str
-                .replace(/^[\d.,]+\s*(ml|cl|oz|dl|l|g|cc|cdas?\.?|cucharadas?|tazas?|chupitos?|shots?|chorros?|partes?|gotas?|pizcas?)?\s+/i, '')
+                .replace(/\s*\([^)]*\)/g, '')
+                .replace(/^[\d.,]+\s*(ml|cl|oz|dl|l|gr?s?|cc|cdas?\.?|cucharadas?|tazas?|chupitos?|shots?|chorros?|partes?|gotas?|pizcas?)?\s+/i, '')
                 .replace(/^\d+\s+(?=[a-záéíóúñü])/i, '')
+                .replace(/^(ml|cl|oz|dl|l|gr?s?|cc)\s+/i, '')
                 .trim();
         }
 
+        function stripAccents(str) {
+            return str.normalize('NFD').replace(/[̀-ͯ]/g, '');
+        }
+
+        /* Singulariza cada palabra para fusionar plurales: "limones sutiles" → "limon sutil" */
+        function singularize(str) {
+            return str.split(' ').map(word => {
+                if (word.length <= 4) return word;
+                if (/[^aeiou]es$/i.test(word)) return word.slice(0, -2);
+                if (/[aeiou]s$/i.test(word)) return word.slice(0, -1);
+                return word;
+            }).join(' ');
+        }
+
         function normalizeIngKey(str) {
-            return stripQty(str).toLowerCase().replace(/\s+/g, ' ').trim();
+            return singularize(stripAccents(stripQty(str).toLowerCase())).replace(/\s+/g, ' ').trim();
         }
 
         /* Misma lógica de separadores que renderIngredients */
