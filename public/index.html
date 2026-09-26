@@ -2537,9 +2537,11 @@
             return a === b || (a.startsWith(b + ' ') && !a.slice(b.length + 1).startsWith('de '));
         }
 
-        /* Selected keys may be stale (saved before a normalization change), so re-normalize them */
+        /* Only keys that still exist in the sheet count: a selection saved before the
+           ingredients were renamed can hold ghosts ("ron añejo") that Mi Barra no longer shows */
         function matchScore(drinkKeys, selected) {
-            const sel = [...selected].map(normalizeIngKey);
+            const current = new Set(allDrinks.flatMap(getDrinkIngKeys));
+            const sel = [...selected].filter(s => current.has(s));
             const missing = drinkKeys.filter(k =>
                 !sel.some(s => ingCovers(s, k) || ingCovers(k, s))
             );
