@@ -2185,6 +2185,9 @@
          *  agrega una línea aquí con el regex del nombre.
          * ───────────────────────────────────────────── */
         const DRINK_IMAGE_RULES = [
+            [/margarita picante/i,          '/img/drinks/margarita-picante.jpg'],
+            [/mojito maracuy/i,             '/img/drinks/mojito-maracuya.jpg'],
+            [/ramos gin fizz/i,             '/img/drinks/ramos-gin-fizz.jpg'],
             [/old fashioned/i,              '/img/drinks/old-fashioned.jpg'],
             [/negroni/i,                    '/img/drinks/negroni.jpg'],
             [/mojito/i,                     '/img/drinks/mojito.jpg'],
@@ -2529,10 +2532,16 @@
             return parseIngList(raw).map(normalizeIngKey).filter(k => k && k.length >= 2);
         }
 
-        /* Fuzzy: "limón sutil" selected → matches cocktail needing "limón" and vice versa */
+        /* "ron añejo" cubre "ron" (y viceversa), pero "soda de pomelo" no es "soda" ni "salsa" es "sal" */
+        function ingCovers(a, b) {
+            return a === b || (a.startsWith(b + ' ') && !a.slice(b.length + 1).startsWith('de '));
+        }
+
+        /* Selected keys may be stale (saved before a normalization change), so re-normalize them */
         function matchScore(drinkKeys, selected) {
+            const sel = [...selected].map(normalizeIngKey);
             const missing = drinkKeys.filter(k =>
-                ![...selected].some(s => s.includes(k) || k.includes(s))
+                !sel.some(s => ingCovers(s, k) || ingCovers(k, s))
             );
             return { canMake: missing.length === 0, missing };
         }
